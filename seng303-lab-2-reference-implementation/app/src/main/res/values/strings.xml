@@ -1,0 +1,94 @@
+<resources>
+    <string name="app_name">Lab 2</string>
+
+    <!-- Stall Names -->
+    <string name="stall_sunny_seeds">Sunny Seeds</string>
+    <string name="stall_sunrise_breakfast">Sunrise Breakfast</string>
+    <string name="stall_java_junction">Java Junction</string>
+    <string name="stall_sausage_sizzle">Sausage Sizzle</string>
+    <string name="stall_fresh_catch">Fresh Catch</string>
+    <string name="stall_oceans_bounty">Ocean\'s Bounty</string>
+    <string name="stall_tea_time">Tea Time</string>
+    <string name="stall_farm_fresh_eggs">Farm Fresh Eggs</string>
+    <string name="stall_olive_orchard">Olive Orchard</string>
+    <string name="stall_sweet_treats">Sweet Treats</string>
+    <string name="stall_zvolskiy_delights">Zvolskiy Delights</string>
+    <string name="stall_donads_bakery">Donads Bakery</string>
+    <string name="stall_artisan_breads">Artisan Breads</string>
+    <string name="stall_veggie_haven">Veggie Haven</string>
+    <string name="stall_berry_bliss">Berry Bliss</string>
+    <string name="stall_fruity_fiesta">Fruity Fiesta</string>
+    <string name="stall_veggie_patch">Veggie Patch</string>
+    <string name="stall_cheese_corner">Cheese Corner</string>
+    <string name="stall_burger_bliss">Burger Bliss</string>
+    <string name="stall_pie_paradise">Pie Paradise</string>
+    <string name="stall_jammin_good">Jammin’ Good</string>
+
+    <!-- Stall Products -->
+    <string name="products_sunny_seeds">Fresh cut flowers, flower pots, bouquets</string>
+    <string name="products_sunrise_breakfast">Pancakes, breakfast burritos, omelets, pastries</string>
+    <string name="products_java_junction">Espresso, lattes, cold brew, pastries</string>
+    <string name="products_sausage_sizzle">Grilled sausage sandwiches, condiments, toppings</string>
+    <string name="products_fresh_catch">Salmon, cod, shrimp, crab, tuna, mackerel, trout, haddock, halibut, sardines, snapper, catfish</string>
+    <string name="products_oceans_bounty">Oysters, clams, calamari, seaweed</string>
+    <string name="products_tea_time">Green tea, black tea, herbal tea, tea accessories</string>
+    <string name="products_farm_fresh_eggs">Free-range eggs, egg-based products</string>
+    <string name="products_olive_orchard">Extra virgin olive oil, stuffed olives, marinated olives</string>
+    <string name="products_sweet_treats">Croissants, cookies, brownies, muffins</string>
+    <string name="products_zvolskiy_delights">Local specialties, preserves, baked goods</string>
+    <string name="products_donads_bakery">Bread, pastries, rolls, cakes</string>
+    <string name="products_artisan_breads">Sourdough, baguettes, ciabatta</string>
+    <string name="products_veggie_haven">Organic vegetables, salad mixes, herbs</string>
+    <string name="products_berry_bliss">Strawberries, blueberries, raspberries</string>
+    <string name="products_fruity_fiesta">Apples, oranges, bananas, seasonal fruits</string>
+    <string name="products_veggie_patch">Root vegetables, leafy greens, seasonal produce</string>
+    <string name="products_cheese_corner">Cheddar, brie, gouda, specialty cheeses</string>
+    <string name="products_burger_bliss">Beef burgers, veggie burgers, toppings</string>
+    <string name="products_pie_paradise">Apple pie, pumpkin pie, savory pies</string>
+    <string name="products_jammin_good">Fruit jams, preserves, spreads</string>
+
+    <!-- Categories -->
+    <string name="category_flowers">Flowers</string>
+    <string name="category_breakfast">Breakfast</string>
+    <string name="category_coffee">Coffee</string>
+    <string name="category_sausages">Sausages</string>
+    <string name="category_seafood">Seafood</string>
+    <string name="category_tea">Tea</string>
+    <string name="category_eggs">Eggs</string>
+    <string name="category_olives">Olives</string>
+    <string name="category_bakery">Bakery</string>
+    <string name="category_breads">Breads</string>
+    <string name="category_vegetables">Vegetables</string>
+    <string name="category_berries">Berries</string>
+    <string name="category_fruits">Fruits</string>
+    <string name="category_cheese">Cheese</string>
+    <string name="category_burgers">Burgers</string>
+    <string name="category_pies">Pies</string>
+    <string name="category_jams">Jams</string>
+
+    <!-- Stall Names with Categories -->
+    <string name="sunny_seeds_category">Flowers</string>
+    <string name="sunrise_breakfast_category">Breakfast</string>
+    <string name="java_junction_category">Coffee</string>
+    <string name="sausage_sizzle_category">Sausages</string>
+    <string name="fresh_catch_category">Seafood</string>
+    <string name="oceans_bounty_category">Seafood</string>
+    <string name="tea_time_category">Tea</string>
+    <string name="farm_fresh_eggs_category">Eggs</string>
+    <string name="olive_orchard_category">Olives</string>
+    <string name="sweet_treats_category">Bakery</string>
+    <string name="zvolskiy_delights_category">Bakery</string>
+    <string name="donads_bakery_category">Bakery</string>
+    <string name="artisan_breads_category">Breads</string>
+    <string name="veggie_haven_category">Vegetables</string>
+    <string name="berry_bliss_category">Berries</string>
+    <string name="fruity_fiesta_category">Fruits</string>
+    <string name="veggie_patch_category">Vegetables</string>
+    <string name="cheese_corner_category">Cheese</string>
+    <string name="burger_bliss_category">Burgers</string>
+    <string name="pie_paradise_category">Pies</string>
+    <string name="jammin_good_category">Jams</string>
+
+    <!-- Splash Screen Introduction -->
+    <string name="splash_intro">Welcome to the Farmers Market App! Discover fresh products and local delicacies.</string>
+</resources>
