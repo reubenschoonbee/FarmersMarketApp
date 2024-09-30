@@ -8,7 +8,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.FlowPreview
-import nz.ac.canterbury.seng303.farmersmarket.models.Market1Stalls
+import nz.ac.canterbury.seng303.lab2.models.Market1Stalls
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
