@@ -21,7 +21,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextIndent
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
 
@@ -51,24 +61,63 @@ fun MarketCard(
                 .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = marketName, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = marketName,
+                style = MaterialTheme.typography.titleMedium, // Use headline style for title
+                fontWeight = FontWeight.Bold // Make it bold
+            )
             Text(text = if (expanded) "▼" else "▲")
         }
 
         if (expanded) {
-            Text(text = "Description: $description")
-            Text(text = "Open Times: $openTimes")
-            Text(text = "Location: $location")
+            Column(modifier = Modifier.padding(start = 8.dp, top = 4.dp, bottom = 8.dp)) {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = ParagraphStyle(textIndent = TextIndent(firstLine = TextUnit.Unspecified, restLine = 16.sp))) {
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append("Description: ")
+                            }
+                            withStyle(style = SpanStyle(fontWeight = FontWeight.Medium)) { // Less bold than the label
+                                append(description)
+                            }
+                        }
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(modifier = Modifier.height(4.dp))
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("Open Times: ")
+                        }
+                        append(openTimes) // Value is not bold
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(modifier = Modifier.height(4.dp))
 
-            Button(
-                onClick = {
-                    stallViewModel.loadDefaultStallsIfNoneExist(marketId)
-                    navController.navigate("AllStallsScreen/$marketId") },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text(text = "View Stalls")
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                            append("Location: ")
+                        }
+                        append(location) // Value is not bold
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+
+
+                Button(
+                    onClick = {
+                        stallViewModel.loadDefaultStallsIfNoneExist(marketId)
+                        navController.navigate("AllStallsScreen/$marketId")
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "View Stalls")
+                }
             }
         }
     }

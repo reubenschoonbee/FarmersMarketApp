@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import nz.ac.canterbury.seng303.lab2.screens.MarketCard
+import androidx.compose.ui.res.stringResource
 
 class MainActivity : ComponentActivity() {
 
@@ -102,10 +103,10 @@ fun Home(navController: NavController, stallViewModel: StallViewModel) {
         // Market 1 (Expanded by default)
         MarketCard(
             marketId = 1,
-            marketName = "Market 1",
-            description = "Description...",
-            openTimes = "Sunday 9am - 4pm\nSaturday 9am - 5pm",
-            location = "48 Pine Rd",
+            marketName = stringResource(R.string.market1),
+            description = stringResource(R.string.market1_description),
+            openTimes = stringResource(R.string.market1_open_times),
+            location = stringResource(R.string.market1_location),
             isExpanded = true,
             navController = navController,
             stallViewModel = stallViewModel
@@ -116,10 +117,10 @@ fun Home(navController: NavController, stallViewModel: StallViewModel) {
         // Market 2
         MarketCard(
             marketId = 2,
-            marketName = "Market 2",
-            description = "",
-            openTimes = "",
-            location = "",
+            marketName = stringResource(R.string.market2),
+            description = stringResource(R.string.market2_description),
+            openTimes = stringResource(R.string.market2_open_times),
+            location = stringResource(R.string.market2_location),
             isExpanded = false,
             navController = navController,
             stallViewModel = stallViewModel
