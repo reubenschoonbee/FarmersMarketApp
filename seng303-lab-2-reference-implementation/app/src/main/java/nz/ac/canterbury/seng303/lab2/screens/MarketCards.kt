@@ -1,5 +1,6 @@
 package nz.ac.canterbury.seng303.lab2.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
+
 
 @Composable
 fun MarketCard(
@@ -63,6 +65,7 @@ fun MarketCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
+
                 onClick = {
                     stallViewModel.loadDefaultStallsIfNoneExist(marketId)
                     navController.navigate("AllStallsScreen/$marketId") },

@@ -18,6 +18,18 @@ class StallViewModel(private val stallStorage: Storage<out Identifiable>) : View
     val selectedStall: StateFlow<Identifiable?> = _selectedStall
     private val _stalls = MutableStateFlow<List<Identifiable>>(emptyList())
     val stalls: StateFlow<List<Identifiable>> get() = _stalls
+    private val _categories = MutableStateFlow<List<String>>(emptyList())
+    val categories: StateFlow<List<String>> = _categories
+    private val _stallByName = MutableStateFlow<Identifiable?>(null)
+    val stallByName: StateFlow<Identifiable?> = _stallByName
+
+    // Function to fetch stall by name and marketId
+    fun getStallByName(marketId: Int, stallName: String) = viewModelScope.launch {
+        // Collect the result from the storage, based on marketId
+        stallStorage.getStallByName(marketId, stallName).collect { fetchedStall ->
+            _stallByName.value = fetchedStall // Now the fetched stall can be Market1Stalls or Market2Stalls
+        }
+    }
 
     fun getStallById(stallId: Int?) = viewModelScope.launch {
         if (stallId != null) {
@@ -38,10 +50,22 @@ class StallViewModel(private val stallStorage: Storage<out Identifiable>) : View
         _stalls.emit(stalls)
     }
 
+    // Function to fetch categories by marketId
+    fun getStallCategories(marketId: Int) = viewModelScope.launch {
+        stallStorage.getCategories(marketId).collect { fetchedCategories ->
+            _categories.value = fetchedCategories
+        }
+    }
+//    fun getStallsCategory(marketId: Int?) = viewModelScope.launch {  {
+//        val categories = when (marketId) {
+//            1 -> Market1Stalls.getCategories(marketId)
+//            2 -> Market2Stalls.getCategories(marketId)
+//            else -> emptyList() // Handle invalid marketId
+//        }
+//    } }
     fun loadDefaultStallsIfNoneExist(marketId: Int) = viewModelScope.launch {
         // Fetch current stalls with the specified marketId
         val currentStalls = stallStorage.getAll(marketId).first()
-
         // Check if the current stalls list is empty
         if (currentStalls.isEmpty()) {
             Log.d("STALL_VIEW_MODEL", "Inserting default stalls...")

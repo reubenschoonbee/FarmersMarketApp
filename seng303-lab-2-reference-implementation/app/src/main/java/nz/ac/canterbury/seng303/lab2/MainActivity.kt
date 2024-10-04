@@ -1,5 +1,6 @@
 package nz.ac.canterbury.seng303.lab2
 
+import AllStallsScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,7 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import nz.ac.canterbury.seng303.lab2.screens.StallScreen
-import nz.ac.canterbury.seng303.lab2.screens.AllStallsScreen
+//import nz.ac.canterbury.seng303.lab2.screens.AllStallsScreen
 import nz.ac.canterbury.seng303.lab2.ui.theme.Lab1Theme
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel // Import StallViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel as koinViewModel
@@ -124,9 +125,6 @@ fun Home(navController: NavController, stallViewModel: StallViewModel) {
             navController = navController,
             stallViewModel = stallViewModel
         )
-
-
-
 
     }
 }
