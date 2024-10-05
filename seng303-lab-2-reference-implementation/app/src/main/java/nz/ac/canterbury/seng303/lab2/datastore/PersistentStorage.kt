@@ -71,7 +71,40 @@ class PersistentStorage<T>(
         }
     }
 
+    override fun getStallByName(marketId: Int, stallName: String): Flow<T?> {
+        return getAll(marketId).map { stalls ->
+            stalls.firstOrNull { stall ->
+                // Check if the stall name matches (ignoring case sensitivity)
+                (stall as? Market1Stalls)?.name.equals(stallName, ignoreCase = true) ||
+                        (stall as? Market2Stalls)?.name.equals(stallName, ignoreCase = true)
+            }
+        }
+    }
 
+
+
+
+    override fun getCategories(marketId: Int): Flow<List<String>> {
+        return dataStore.data.map { preferences ->
+            val jsonString = preferences[preferenceKey] ?: EMPTY_JSON_STRING
+
+            // Deserialize based on marketId
+            val categories: List<String> = when (marketId) {
+                1 -> {
+                    val market1Stalls: List<Market1Stalls> = gson.fromJson(jsonString, object : TypeToken<List<Market1Stalls>>() {}.type) ?: emptyList()
+                    market1Stalls.map { it.category }
+                }
+                2 -> {
+                    val market2Stalls: List<Market2Stalls> = gson.fromJson(jsonString, object : TypeToken<List<Market2Stalls>>() {}.type) ?: emptyList()
+                    market2Stalls.map { it.category }
+                }
+                else -> emptyList() // Handle invalid marketId if needed
+            }
+
+            // Return distinct categories
+            categories.distinct()
+        }
+    }
 
 
     override fun edit(identifier: Int, data: T): Flow<Int> {
