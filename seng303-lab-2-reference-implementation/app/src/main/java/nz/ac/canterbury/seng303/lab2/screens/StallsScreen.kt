@@ -35,8 +35,6 @@ import nz.ac.canterbury.seng303.lab2.models.Stall
 
 @Composable
 fun StallsScreen(navController: NavController, stallViewModel: StallViewModel, marketId: Int?) {
-    stallViewModel.getStalls(marketId)
-
     val stalls: List<Stall> by stallViewModel.stalls.collectAsState(emptyList())
     val categories by stallViewModel.categories.collectAsState(initial = emptyList())
 
@@ -113,7 +111,7 @@ fun StallCard(
         modifier = modifier
 //            .padding(8.dp)
 //            .fillMaxWidth()
-            .clickable { navController.navigate("StallDetail/${stall.id}") },
+            .clickable { navController.navigate("ProductsScreen/${stall.id}") },
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(

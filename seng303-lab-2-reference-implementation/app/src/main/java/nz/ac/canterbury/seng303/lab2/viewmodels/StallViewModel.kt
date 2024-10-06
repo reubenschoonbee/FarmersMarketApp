@@ -17,12 +17,8 @@ import nz.ac.canterbury.seng303.lab2.models.Stall
 class StallViewModel(private val stallStorage: Storage<Stall>) : ViewModel() {
     private val _stalls = MutableStateFlow<List<Stall>>(emptyList())
     val stalls: StateFlow<List<Stall>> get() = _stalls
-
-//    private val _selectedStall = MutableStateFlow<Identifiable?>(null)
-//    val selectedStall: StateFlow<Identifiable?> = _selectedStall
-//
-//    private val _stallByName = MutableStateFlow<Identifiable?>(null)
-//    val stallByName: StateFlow<Identifiable?> = _stallByName
+    private val _selectedStall = MutableStateFlow<Stall?>(null)
+    val selectedStall: StateFlow<Stall?> = _selectedStall
 
     // Auto update categories when stalls change
     val categories: StateFlow<List<String>> = stalls
@@ -48,28 +44,20 @@ class StallViewModel(private val stallStorage: Storage<Stall>) : ViewModel() {
             }
     }
 
+    fun getStallById(stallId: Int?) = viewModelScope.launch {
+        if (stallId != null) {
+            _selectedStall.value = stallStorage.get { it.getIdentifier() == stallId }.first()
+        } else {
+            _selectedStall.value = null
+        }
+    }
+
     // Deletes all stalls in the datastore
     fun deleteAll() = viewModelScope.launch {
         stallStorage.deleteAll().collect {}
     }
 
-    // Function to fetch stall by name and marketId
-//    fun getStallByName(marketId: Int, stallName: String) = viewModelScope.launch {
-//        // Collect the result from the storage, based on marketId
-//        stallStorage.getStallByName(marketId, stallName).collect { fetchedStall ->
-//            _stallByName.value = fetchedStall // Now the fetched stall can be Market1Stalls or Market2Stalls
-//        }
-//    }
-
-
-//    fun getStallById(stallId: Int?) = viewModelScope.launch {
-//        if (stallId != null) {
-//            _selectedStall.value = stallStorage.get { it.getIdentifier() == stallId }.first()
-//        } else {
-//            _selectedStall.value = null
-//        }
-//    }
-
+    // Loads default stalls if there are none in the datastore all stalls in the datastore
     fun loadDefaultNotesIfNoneExist() = viewModelScope.launch {
         val currentStalls = stallStorage.getAll().first()
         if (currentStalls.isEmpty()) {
@@ -83,6 +71,19 @@ class StallViewModel(private val stallStorage: Storage<Stall>) : ViewModel() {
             }
         }
     }
+
+
+//
+//    private val _stallByName = MutableStateFlow<Identifiable?>(null)
+//    val stallByName: StateFlow<Identifiable?> = _stallByName
+
+    // Function to fetch stall by name and marketId
+//    fun getStallByName(marketId: Int, stallName: String) = viewModelScope.launch {
+//        // Collect the result from the storage, based on marketId
+//        stallStorage.getStallByName(marketId, stallName).collect { fetchedStall ->
+//            _stallByName.value = fetchedStall // Now the fetched stall can be Market1Stalls or Market2Stalls
+//        }
+//    }
 
 }
 
