@@ -6,7 +6,6 @@ class Product(
     val description: String,
     val price: Double
 ) : Identifiable {
-
     override fun getIdentifier(): Int {
         return id
     }

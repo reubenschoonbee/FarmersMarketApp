@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lab 2</string>
+    <string name="app_name">Market Finder</string>
 
     <!-- Stall Names -->
     <string name="stall_sunny_seeds">Sunny Seeds</string>
