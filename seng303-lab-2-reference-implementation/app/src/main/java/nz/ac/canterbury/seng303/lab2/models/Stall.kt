@@ -2,22 +2,22 @@ package nz.ac.canterbury.seng303.lab2.models
 
 import nz.ac.canterbury.seng303.lab2.R
 
-class Market2Stalls(
+class Stall(
     val id: Int,
     val name: String,
     val category: String,
     val products: List<Product>,
+    val marketIds: List<Int>,
     val imageResId: Int,
 ) : Identifiable {
-
     override fun getIdentifier(): Int {
         return id
     }
 
     companion object {
-        fun getStalls(marketId: Int): List<Market2Stalls> {
+        fun getStalls(): List<Stall> {
             return listOf(
-                Market2Stalls(
+                Stall(
                     1,
                     "Sunny Seeds",
                     "Flowers",
@@ -33,9 +33,10 @@ class Market2Stalls(
                         Product(9, "Carnations", "Classic carnations", 2.2),
                         Product(10, "Iris", "Beautiful blue irises", 3.5)
                     ),
+                    marketIds = listOf(2, 4),
                     R.drawable.stall_sunny_seeds
                 ),
-                Market2Stalls(
+                Stall(
                     2,
                     "Sunrise Breakfast",
                     "Breakfast",
@@ -51,9 +52,10 @@ class Market2Stalls(
                         Product(19, "Muffins", "Freshly baked muffins", 2.5),
                         Product(20, "Breakfast Wrap", "Eggs and sausage wrap", 4.5)
                     ),
+                    marketIds = listOf(2, 4),
                     R.drawable.stall_sunrise_breakfast
                 ),
-                Market2Stalls(
+                Stall(
                     3,
                     "Java Junction",
                     "Coffee",
@@ -69,9 +71,10 @@ class Market2Stalls(
                         Product(29, "Caramel Macchiato", "Espresso with caramel and milk", 4.5),
                         Product(30, "Pastries", "Variety of fresh pastries", 2.5)
                     ),
+                    marketIds = listOf(3),
                     R.drawable.stall_java_junction
                 ),
-                Market2Stalls(
+                Stall(
                     4,
                     "Sausage Sizzle",
                     "Sausages",
@@ -92,9 +95,10 @@ class Market2Stalls(
                         Product(39, "Spicy Sausage", "Spicy grilled sausage", 5.0),
                         Product(40, "Onion Rings", "Crispy onion rings", 3.0)
                     ),
+                    marketIds = listOf(3),
                     R.drawable.stall_sausage_sizzle
                 ),
-                Market2Stalls(
+                Stall(
                     5,
                     "Fresh Catch",
                     "Seafood",
@@ -110,9 +114,10 @@ class Market2Stalls(
                         Product(49, "Sardines", "Grilled sardines", 9.0),
                         Product(50, "Catfish", "Fried catfish", 8.0)
                     ),
+                    marketIds = listOf(4),
                     R.drawable.stall_fresh_catch
                 ),
-                Market2Stalls(
+                Stall(
                     6,
                     "Ocean's Bounty",
                     "Seafood",
@@ -133,9 +138,10 @@ class Market2Stalls(
                         Product(59, "Fish & Chips", "Classic fish and chips", 11.0),
                         Product(60, "Clam Chowder", "Creamy clam chowder", 6.0)
                     ),
+                    marketIds = listOf(4),
                     R.drawable.stall_oceans_bounty
                 ),
-                Market2Stalls(
+                Stall(
                     7,
                     "Tea Time",
                     "Tea",
@@ -151,9 +157,10 @@ class Market2Stalls(
                         Product(69, "Flavored Tea", "Variety of flavored teas", 3.5),
                         Product(70, "Tea Infuser", "Infuser for loose leaf tea", 2.0)
                     ),
+                    marketIds = listOf(1, 2, 4),
                     R.drawable.stall_tea_time
                 ),
-                Market2Stalls(
+                Stall(
                     8,
                     "Farm Fresh Eggs",
                     "Eggs",
@@ -169,9 +176,10 @@ class Market2Stalls(
                         Product(79, "Egg Noodles", "Fresh egg noodles", 4.0),
                         Product(80, "Egg Drop Soup", "Egg drop soup", 3.0)
                     ),
+                    marketIds = listOf(1, 2, 4),
                     R.drawable.stall_farm_fresh_eggs
                 ),
-                Market2Stalls(
+                Stall(
                     9,
                     "Olive Orchard",
                     "Olives",
@@ -192,9 +200,10 @@ class Market2Stalls(
                         Product(89, "Black Olives", "Savory black olives", 4.0),
                         Product(90, "Olive-based Snacks", "Snacks made with olives", 5.0)
                     ),
+                    marketIds = listOf(1, 3, 4),
                     R.drawable.stall_olive_orchard
                 ),
-                Market2Stalls(
+                Stall(
                     10,
                     "Sweet Treats",
                     "Bakery",
@@ -210,9 +219,10 @@ class Market2Stalls(
                         Product(99, "Meringues", "Light meringues", 2.5),
                         Product(100, "Macarons", "Colorful French macarons", 3.5)
                     ),
+                    marketIds = listOf(1, 3, 4),
                     R.drawable.stall_sweet_treats
                 ),
-                Market2Stalls(
+                Stall(
                     11,
                     "Zvolskiy Delights",
                     "Bakery",
@@ -228,9 +238,10 @@ class Market2Stalls(
                         Product(109, "Brioche", "Soft brioche bread", 3.5),
                         Product(110, "Ciabatta", "Italian ciabatta bread", 4.0)
                     ),
+                    marketIds = listOf( 3, 4),
                     R.drawable.stall_zvolskiy_delights
                 ),
-                Market2Stalls(
+                Stall(
                     12,
                     "Donad's Bakery",
                     "Bakery",
@@ -246,9 +257,10 @@ class Market2Stalls(
                         Product(119, "Cupcakes", "Decorated cupcakes", 4.0),
                         Product(120, "Biscotti", "Crunchy biscotti", 2.5)
                     ),
+                    marketIds = listOf(1, 3, 4),
                     R.drawable.stall_donads_bakery
                 ),
-                Market2Stalls(
+                Stall(
                     13,
                     "Artisan Breads",
                     "Breads",
@@ -264,9 +276,10 @@ class Market2Stalls(
                         Product(129, "Dinner Rolls", "Soft dinner rolls", 2.0),
                         Product(130, "Breadsticks", "Crispy breadsticks", 2.5)
                     ),
+                    marketIds = listOf(3, 4),
                     R.drawable.stall_artisan_bakery
                 ),
-                Market2Stalls(
+                Stall(
                     14,
                     "Veggie Haven",
                     "Vegetables",
@@ -282,9 +295,10 @@ class Market2Stalls(
                         Product(139, "Carrots", "Sweet carrots", 2.0),
                         Product(140, "Eggplant", "Fresh eggplant", 3.0)
                     ),
+                    marketIds = listOf(1, 3, 4),
                     R.drawable.stall_vegie_haven
                 ),
-                Market2Stalls(
+                Stall(
                     15,
                     "Berry Bliss",
                     "Berries",
@@ -300,9 +314,10 @@ class Market2Stalls(
                         Product(149, "Dried Berries", "Dried mixed berries", 5.0),
                         Product(150, "Berry Desserts", "Assorted berry desserts", 6.0)
                     ),
+                    marketIds = listOf( 3, 4),
                     R.drawable.stall_berry_bliss
                 ),
-                Market2Stalls(
+                Stall(
                     16,
                     "Fruity Fiesta",
                     "Fruits",
@@ -318,9 +333,10 @@ class Market2Stalls(
                         Product(159, "Kiwi", "Exotic kiwi fruit", 2.5),
                         Product(160, "Watermelon", "Refreshing watermelon", 3.5)
                     ),
+                    marketIds = listOf(1, 3, 4),
                     R.drawable.stall_fruity_fiesta
                 ),
-                Market2Stalls(
+                Stall(
                     17,
                     "Veggie Patch",
                     "Vegetables",
@@ -336,9 +352,10 @@ class Market2Stalls(
                         Product(139, "Eggplant", "Fresh eggplant", 2.0),
                         Product(140, "Pumpkins", "Seasonal pumpkins", 3.0)
                     ),
+                    marketIds = listOf(3),
                     R.drawable.stall_vegie_patch
                 ),
-                Market2Stalls(
+                Stall(
                     17,
                     "Cheese Corner",
                     "Cheese",
@@ -354,9 +371,10 @@ class Market2Stalls(
                         Product(109, "Ricotta", "Creamy ricotta cheese", 4.5),
                         Product(110, "Cream Cheese", "Smooth cream cheese", 3.0)
                     ),
+                    marketIds = listOf(1, 3, 4),
                     R.drawable.stall_cheese_corner
                 ),
-                Market2Stalls(
+                Stall(
                     18,
                     "Burger Bliss",
                     "Burgers",
@@ -372,10 +390,11 @@ class Market2Stalls(
                         Product(119, "Spicy Burger", "Spicy beef burger", 9.0),
                         Product(120, "Fish Burger", "Crispy fish burger", 8.5)
                     ),
+                    marketIds = listOf(1, 2, 3, 4),
                     R.drawable.stall_burger_bliss
                 ),
 
-                Market2Stalls(
+                Stall(
                     20,
                     "Jammin' Good",
                     "Jams",
@@ -391,6 +410,7 @@ class Market2Stalls(
                         Product(139, "Fig Jam", "Rich fig jam", 4.5),
                         Product(140, "Ginger Jam", "Spicy ginger jam", 3.5)
                     ),
+                    marketIds = listOf(1, 2),
                     R.drawable.stall_jammin_good
                 )
 
@@ -398,4 +418,5 @@ class Market2Stalls(
 
         }
     }
+
 }

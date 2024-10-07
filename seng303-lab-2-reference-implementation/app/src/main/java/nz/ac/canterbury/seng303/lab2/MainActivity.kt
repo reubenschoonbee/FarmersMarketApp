@@ -1,12 +1,9 @@
 package nz.ac.canterbury.seng303.lab2
 
-import AllStallsScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -16,31 +13,37 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import nz.ac.canterbury.seng303.lab2.screens.StallScreen
-//import nz.ac.canterbury.seng303.lab2.screens.AllStallsScreen
+import nz.ac.canterbury.seng303.lab2.screens.ProductsScreen
 import nz.ac.canterbury.seng303.lab2.ui.theme.Lab1Theme
-import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel // Import StallViewModel
+import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel as koinViewModel
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import nz.ac.canterbury.seng303.lab2.screens.MarketCard
+
+import nz.ac.canterbury.seng303.lab2.screens.Home
+import nz.ac.canterbury.seng303.lab2.screens.StallsScreen
+import nz.ac.canterbury.seng303.lab2.viewmodels.MarketViewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val stallViewModel: StallViewModel by koinViewModel() // Use StallViewModel
+    private val marketViewModel: MarketViewModel by koinViewModel()
+    private val stallViewModel: StallViewModel by koinViewModel()
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Delete the datastore on launch
+        if (false) {
+            marketViewModel.deleteAll()
+            stallViewModel.deleteAll()
+        }
+
+        // Load the test data if none exist
+        marketViewModel.loadDefaultNotesIfNoneExist()
+        stallViewModel.loadDefaultNotesIfNoneExist()
 
         setContent {
             Lab1Theme {
@@ -63,15 +66,15 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(it)) {
                         NavHost(navController = navController, startDestination = "Home") {
                             composable("Home") {
-                                Home(navController= navController, stallViewModel)
+                                Home(navController= navController, marketViewModel)
                             }
-                            composable("StallDetail/{stallId}") { backStackEntry ->
+                            composable("ProductsScreen/{stallId}") { backStackEntry ->
                                 val stallId = backStackEntry.arguments?.getString("stallId")?.toInt()
-                                stallId?.let { StallScreen(navController, it, stallViewModel) }
+                                stallId?.let { ProductsScreen(navController, it, stallViewModel) }
                             }
-                            composable("AllStallsScreen/{marketId}") { backStackEntry ->
+                            composable("StallsScreen/{marketId}") { backStackEntry ->
                                 val marketId = backStackEntry.arguments?.getString("marketId")?.toInt()
-                                AllStallsScreen(navController = navController, stallViewModel = stallViewModel, marketId = marketId)
+                                StallsScreen(navController = navController, stallViewModel = stallViewModel, marketId = marketId)
                             }
 
                         }
@@ -79,53 +82,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-
-}
-
-@Composable
-fun Home(navController: NavController, stallViewModel: StallViewModel) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "View Our Markets!",
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Market 1 (Expanded by default)
-        MarketCard(
-            marketId = 1,
-            marketName = "Market 1",
-            description = "Description...",
-            openTimes = "Sunday 9am - 4pm\nSaturday 9am - 5pm",
-            location = "48 Pine Rd",
-            isExpanded = true,
-            navController = navController,
-            stallViewModel = stallViewModel
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Market 2
-        MarketCard(
-            marketId = 2,
-            marketName = "Market 2",
-            description = "",
-            openTimes = "",
-            location = "",
-            isExpanded = false,
-            navController = navController,
-            stallViewModel = stallViewModel
-        )
-
     }
 }
 
