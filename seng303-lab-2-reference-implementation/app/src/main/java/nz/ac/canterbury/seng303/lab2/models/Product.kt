@@ -4,7 +4,8 @@ class Product(
     val id: Int,
     val name: String,
     val description: String,
-    val price: Double
+    val price: Double,
+    //val imageResId: Int
 ) : Identifiable {
     override fun getIdentifier(): Int {
         return id
