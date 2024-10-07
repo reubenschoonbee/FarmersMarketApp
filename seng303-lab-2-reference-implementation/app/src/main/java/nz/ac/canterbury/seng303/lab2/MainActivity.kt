@@ -107,6 +107,7 @@ fun Home(navController: NavController, stallViewModel: StallViewModel) {
             description = stringResource(R.string.market1_description),
             openTimes = stringResource(R.string.market1_open_times),
             location = stringResource(R.string.market1_location),
+            address = stringResource(R.string.market1_address),
             isExpanded = true,
             navController = navController,
             stallViewModel = stallViewModel
@@ -121,6 +122,7 @@ fun Home(navController: NavController, stallViewModel: StallViewModel) {
             description = stringResource(R.string.market2_description),
             openTimes = stringResource(R.string.market2_open_times),
             location = stringResource(R.string.market2_location),
+            address = stringResource(R.string.market2_address),
             isExpanded = false,
             navController = navController,
             stallViewModel = stallViewModel

@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.google.android.gms:play-services-location:19.0.1")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.1")
@@ -59,6 +59,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3-window-size-class")
     implementation("androidx.navigation:navigation-compose:2.6.0")
 
     testImplementation("junit:junit:4.13.2")
@@ -72,5 +73,6 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("com.google.code.gson:gson:2.8.9")
     implementation("io.insert-koin:koin-android:3.1.4")
-
+    implementation(kotlin("script-runtime"))
+    implementation("com.google.maps.android:maps-compose:4.3.3")
 }
