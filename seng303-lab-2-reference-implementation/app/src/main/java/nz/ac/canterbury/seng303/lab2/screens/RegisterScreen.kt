@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import nz.ac.canterbury.seng303.lab2.models.User
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,7 +72,17 @@ fun RegisterScreen(userViewModel: UserViewModel, navController: NavController) {
                     errorMessage = "All fields must be filled!"
                 } else {
                     val user = User(id = username.hashCode(), username = username, password = password)
-                    userViewModel.registerUser(user) {
+                    userViewModel.viewModelScope.launch {
+                        val registerDeferred = userViewModel.registerUser (user)
+                        registerDeferred.await()
+                        val loginSuccessful = userViewModel.loginUser (username, password)
+                        if (loginSuccessful) {
+                            navController.navigate("Home") {
+                                popUpTo("Login") { inclusive = true }
+                            }
+                        } else {
+                            errorMessage = "Couldn't log in user after registration"
+                        }
                     }
                 }
             },
@@ -78,5 +90,8 @@ fun RegisterScreen(userViewModel: UserViewModel, navController: NavController) {
         ) {
             Text("Register")
         }
+        Text("Register")
+        }
+
     }
-}
+

@@ -3,6 +3,8 @@ package nz.ac.canterbury.seng303.lab2.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -32,23 +34,22 @@ class UserViewModel(private val userStorage: Storage<User>) : ViewModel() {
             }
     }
 
-    fun registerUser(user: User, onRegisterSuccess: () -> Unit = {}) = viewModelScope.launch {
-        val existingUser = userStorage.getAll().first().any { it.username == user.username }
-        if (existingUser) {
+    fun registerUser (user: User, onRegisterSuccess: () -> Unit = {}): Deferred<Unit> = viewModelScope.async {
+        val existingUser  = userStorage.getAll().first().any { it.username == user.username }
+        if (existingUser ) {
             Log.e("USER_VIEW_MODEL", "Username already exists")
         } else {
             userStorage.insert(user).collect { result ->
                 if (result == 1) {
-                    Log.e("USER_VIEW_MODEL", "User registered successfully")
+                    Log.e("USER_VIEW_MODEL", "User  registered successfully")
                     onRegisterSuccess()  // Call the success callback after successful registration
                 }
             }
         }
     }
 
-    fun loginUser(username: String, password: String): Boolean {
-        var isAuthenticated = false
-        viewModelScope.launch {
+        suspend fun loginUser(username: String, password: String): Boolean {
+            var isAuthenticated = false
             val allUsers = userStorage.getAll().first()
             Log.e("USER_VIEW_MODEL", "All users: $allUsers")
             Log.e("USER_VIEW_MODEL", "Username: $username, Password: $password")
@@ -57,14 +58,20 @@ class UserViewModel(private val userStorage: Storage<User>) : ViewModel() {
             if (isAuthenticated) {
                 _isLoggedIn.emit(true)
             }
+            return isAuthenticated
         }
-        return isAuthenticated
+
+        fun logout() {
+            viewModelScope.launch {
+                _isLoggedIn.emit(false)
+            }
+        }
+
     }
 
 
-    fun logout() {
-        viewModelScope.launch {
-            _isLoggedIn.emit(false)
-        }
-    }
-}
+
+
+
+
+

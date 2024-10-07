@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,13 +60,15 @@ fun LoginScreen(userViewModel: UserViewModel, navController: NavController) {
                 if (username.isEmpty() || password.isEmpty()) {
                     errorMessage = "Please fill out all fields"
                 } else {
-                    val loginSuccessful = userViewModel.loginUser(username, password)
-                    if (loginSuccessful) {
-                        navController.navigate("Home") {
-                            popUpTo("Login") { inclusive = true }
+                    userViewModel.viewModelScope.launch {
+                        val loginSuccessful = userViewModel.loginUser(username, password)
+                        if (loginSuccessful) {
+                            navController.navigate("Home") {
+                                popUpTo("Login") { inclusive = true }
+                            }
+                        } else {
+                            errorMessage = "Invalid username or password"
                         }
-                    } else {
-                        errorMessage = "Invalid username or password"
                     }
                 }
             },
