@@ -61,11 +61,16 @@ class UserViewModel(private val userStorage: Storage<User>) : ViewModel() {
             return isAuthenticated
         }
 
-        fun logout() {
+    fun logout() {
             viewModelScope.launch {
                 _isLoggedIn.emit(false)
             }
         }
+
+    suspend fun getUserByUsername(username: String): User? {
+        val allUsers = userStorage.getAll().first()  // Get current users
+        return allUsers.firstOrNull { it.username == username }
+    }
 
     }
 

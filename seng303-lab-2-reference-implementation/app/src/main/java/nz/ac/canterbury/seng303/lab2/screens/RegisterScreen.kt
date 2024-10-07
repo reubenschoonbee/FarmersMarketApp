@@ -21,6 +21,8 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import nz.ac.canterbury.seng303.lab2.models.User
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(userViewModel: UserViewModel, navController: NavController) {
@@ -71,11 +73,17 @@ fun RegisterScreen(userViewModel: UserViewModel, navController: NavController) {
                 } else if (username.isEmpty() || password.isEmpty()) {
                     errorMessage = "All fields must be filled!"
                 } else {
-                    val user = User(id = username.hashCode(), username = username, password = password)
+                    val user =
+                        User(id = username.hashCode(), username = username, password = password)
                     userViewModel.viewModelScope.launch {
-                        val registerDeferred = userViewModel.registerUser (user)
+                        val existing_user = userViewModel.getUserByUsername(username)
+                        if (existing_user != null) {
+                            errorMessage = "User already exists!"
+                            return@launch
+                        }
+                        val registerDeferred = userViewModel.registerUser(user)
                         registerDeferred.await()
-                        val loginSuccessful = userViewModel.loginUser (username, password)
+                        val loginSuccessful = userViewModel.loginUser(username, password)
                         if (loginSuccessful) {
                             navController.navigate("Home") {
                                 popUpTo("Login") { inclusive = true }
@@ -90,8 +98,7 @@ fun RegisterScreen(userViewModel: UserViewModel, navController: NavController) {
         ) {
             Text("Register")
         }
-        Text("Register")
-        }
 
     }
+}
 
