@@ -6,6 +6,7 @@ class Market (
     val description: String,
     val openTimes: String,
     val location: String,
+    val address:String
 ) : Identifiable {
     override fun getIdentifier(): Int {
         return id
@@ -21,6 +22,7 @@ class Market (
                     description = "Premier destination for fresh, especially organic, produce",
                     openTimes = "Every Sunday, 9am to midday",
                     location = "66 Colombo St",
+                    address = "South Christchurch Library, South Christchurch Farmers' Market, Christchurch"
                 ),
                 Market(
                     id = 2,
@@ -28,13 +30,15 @@ class Market (
                     description = "Local farmers selling fresh produce.",
                     openTimes = "Every Saturday, 8 AM - 2 PM",
                     location = "34 Methven Chertsey Road, Methven",
+                    address = "256 Methven Chertsey Rd, Methven 7782, New Zealand"
                 ),
                 Market(
                     id = 3,
                     name = "Lincoln Farmers & Craft Market",
                     description = "Local farmers selling fresh produce.",
                     openTimes = "Every Saturday 10am - 1pm",
-                    location = "Gerald St, Lincoln, Christchurh",
+                    location = "Gerald St, Lincoln, Christchurch",
+                    address = "Gerald St, Lincoln, Christchurch"
                 ),
                 Market(
                     id = 4,
@@ -42,6 +46,7 @@ class Market (
                     description = "Local farmers selling fresh produce.",
                     openTimes = "Saturday 8am - midday",
                     location = "67 Queen St, Leamington, Cambridge",
+                    address = "67 Queen St, Leamington, Cambridge"
                 )
             )
 
