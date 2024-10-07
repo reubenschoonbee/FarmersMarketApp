@@ -4,11 +4,13 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import nz.ac.canterbury.seng303.lab2.models.Identifiable
+import nz.ac.canterbury.seng303.lab2.models.User
 import java.lang.reflect.Type
 
 class PersistentStorage<T>(
@@ -90,6 +92,26 @@ class PersistentStorage<T>(
         return flow {
             dataStore.edit {
                 it[preferenceKey] = EMPTY_JSON_STRING  // Set the preference key to an empty JSON string
+                emit(OPERATION_SUCCESS)
+            }
+        }
+    }
+
+    fun getAllUsers(): Flow<List<User>> {
+        return dataStore.data.map { preferences ->
+            val jsonString = preferences[preferenceKey] ?: EMPTY_JSON_STRING
+            val users = gson.fromJson<List<User>>(jsonString, object : TypeToken<List<User>>() {}.type)
+            users
+        }
+    }
+
+    fun insertAllUsers(users: List<User>): Flow<Int> {
+        return flow {
+            val currentUsers = getAllUsers().first().toMutableList()
+            currentUsers.addAll(users)
+            dataStore.edit {
+                val jsonString = gson.toJson(currentUsers, object : TypeToken<List<User>>() {}.type)
+                it[preferenceKey] = jsonString
                 emit(OPERATION_SUCCESS)
             }
         }
