@@ -19,10 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import nz.ac.canterbury.seng303.lab2.models.User
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(userViewModel: UserViewModel, onRegisterSuccess: () -> Unit) {
+fun RegisterScreen(userViewModel: UserViewModel, navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
@@ -71,8 +70,8 @@ fun RegisterScreen(userViewModel: UserViewModel, onRegisterSuccess: () -> Unit) 
                     errorMessage = "All fields must be filled!"
                 } else {
                     val user = User(id = username.hashCode(), username = username, password = password)
-                    userViewModel.registerUser(user)
-                    onRegisterSuccess() // Imlpemnt so navigates to correct screen
+                    userViewModel.registerUser(user) {
+                    }
                 }
             },
             modifier = Modifier.fillMaxWidth()

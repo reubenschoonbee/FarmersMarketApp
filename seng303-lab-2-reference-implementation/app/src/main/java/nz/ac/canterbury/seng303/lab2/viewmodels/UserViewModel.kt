@@ -17,28 +17,54 @@ class UserViewModel(private val userStorage: Storage<User>) : ViewModel() {
     private val _users = MutableStateFlow<List<User>>(emptyList())
     val users: StateFlow<List<User>> get() = _users
 
-    fun getUsers() = viewModelScope.launch {
-        userStorage.getAll().catch { Log.e("USER_VIEW_MODEL", it.toString()) }
-            .collect { _users.emit(it) }
+    private val _isLoggedIn = MutableStateFlow(false)
+    val isLoggedIn: StateFlow<Boolean> get() = _isLoggedIn
+
+    init {
+        getUsers() // Load users on initialization
     }
 
-    fun registerUser(user: User) = viewModelScope.launch {
-        if (userStorage.getAll().first().any { it.username == user.username }) {
-            Log.e("USER_VIEW_MODEL", "Username already exists")
-        }
-        else {
-            userStorage.insert(user).collect { Log.e("USER_VIEW_MODEL", it.toString()) }
-        }
+    fun getUsers() = viewModelScope.launch {
+        userStorage.getAll()
+            .catch { Log.e("USER_VIEW_MODEL", it.toString()) }
+            .collect { usersList ->
+                _users.emit(usersList)
+            }
+    }
 
+    fun registerUser(user: User, onRegisterSuccess: () -> Unit = {}) = viewModelScope.launch {
+        val existingUser = userStorage.getAll().first().any { it.username == user.username }
+        if (existingUser) {
+            Log.e("USER_VIEW_MODEL", "Username already exists")
+        } else {
+            userStorage.insert(user).collect { result ->
+                if (result == 1) {
+                    Log.e("USER_VIEW_MODEL", "User registered successfully")
+                    onRegisterSuccess()  // Call the success callback after successful registration
+                }
+            }
+        }
     }
 
     fun loginUser(username: String, password: String): Boolean {
         var isAuthenticated = false
         viewModelScope.launch {
             val allUsers = userStorage.getAll().first()
+            Log.e("USER_VIEW_MODEL", "All users: $allUsers")
+            Log.e("USER_VIEW_MODEL", "Username: $username, Password: $password")
             val user = allUsers.firstOrNull { it.username == username && it.password == password }
             isAuthenticated = user != null
+            if (isAuthenticated) {
+                _isLoggedIn.emit(true)
+            }
         }
         return isAuthenticated
+    }
+
+
+    fun logout() {
+        viewModelScope.launch {
+            _isLoggedIn.emit(false)
+        }
     }
 }

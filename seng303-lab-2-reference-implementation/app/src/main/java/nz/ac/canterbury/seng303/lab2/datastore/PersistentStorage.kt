@@ -97,25 +97,25 @@ class PersistentStorage<T>(
         }
     }
 
-    fun getAllUsers(): Flow<List<User>> {
-        return dataStore.data.map { preferences ->
-            val jsonString = preferences[preferenceKey] ?: EMPTY_JSON_STRING
-            val users = gson.fromJson<List<User>>(jsonString, object : TypeToken<List<User>>() {}.type)
-            users
-        }
-    }
-
-    fun insertAllUsers(users: List<User>): Flow<Int> {
-        return flow {
-            val currentUsers = getAllUsers().first().toMutableList()
-            currentUsers.addAll(users)
-            dataStore.edit {
-                val jsonString = gson.toJson(currentUsers, object : TypeToken<List<User>>() {}.type)
-                it[preferenceKey] = jsonString
-                emit(OPERATION_SUCCESS)
-            }
-        }
-    }
+//    fun getAllUsers(): Flow<List<User>> {
+//        return dataStore.data.map { preferences ->
+//            val jsonString = preferences[preferenceKey] ?: EMPTY_JSON_STRING
+//            val users = gson.fromJson<List<User>>(jsonString, object : TypeToken<List<User>>() {}.type)
+//            users
+//        }
+//    }
+//
+//    fun insertAllUsers(users: List<User>): Flow<Int> {
+//        return flow {
+//            val currentUsers = getAllUsers().first().toMutableList()
+//            currentUsers.addAll(users)
+//            dataStore.edit {
+//                val jsonString = gson.toJson(currentUsers, object : TypeToken<List<User>>() {}.type)
+//                it[preferenceKey] = jsonString
+//                emit(OPERATION_SUCCESS)
+//            }
+//        }
+//    }
 
     companion object {
         private const val OPERATION_SUCCESS = 1

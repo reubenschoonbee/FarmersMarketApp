@@ -21,7 +21,7 @@ import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(userViewModel: UserViewModel, onLoginSuccess: () -> Unit) {
+fun LoginScreen(userViewModel: UserViewModel, navController: NavController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
@@ -55,11 +55,17 @@ fun LoginScreen(userViewModel: UserViewModel, onLoginSuccess: () -> Unit) {
 
         Button(
             onClick = {
-                val isAuthenticated = userViewModel.loginUser(username, password)
-                if (isAuthenticated) {
-                    onLoginSuccess() // Implement so navigates to correct screen
+                if (username.isEmpty() || password.isEmpty()) {
+                    errorMessage = "Please fill out all fields"
                 } else {
-                    errorMessage = "Invalid username or password!"
+                    val loginSuccessful = userViewModel.loginUser(username, password)
+                    if (loginSuccessful) {
+                        navController.navigate("Home") {
+                            popUpTo("Login") { inclusive = true }
+                        }
+                    } else {
+                        errorMessage = "Invalid username or password"
+                    }
                 }
             },
             modifier = Modifier.fillMaxWidth()
