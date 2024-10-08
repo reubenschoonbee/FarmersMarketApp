@@ -3,6 +3,8 @@ package nz.ac.canterbury.seng303.lab2.screens
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,13 +41,32 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.runtime.*
+import android.Manifest
+import android.content.Context
+import androidx.compose.runtime.LaunchedEffect
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import nz.ac.canterbury.seng303.lab2.NotificationHandler
 import nz.ac.canterbury.seng303.lab2.models.Market
 import nz.ac.canterbury.seng303.lab2.viewmodels.MarketViewModel
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun Home(navController: NavController, marketViewModel: MarketViewModel) {
     marketViewModel.getMarkets()
     val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
+    val context = LocalContext.current
+    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val notificationHandler = NotificationHandler(context)
+
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.status.isGranted) {
+            postNotificationPermission.launchPermissionRequest()
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -53,6 +74,12 @@ fun Home(navController: NavController, marketViewModel: MarketViewModel) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Button(onClick = {
+            notificationHandler.showSimpleNotification()
+        }) { Text(text = "Simple notification") }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = "View Our Markets!",
             style = MaterialTheme.typography.bodyLarge,
