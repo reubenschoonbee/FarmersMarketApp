@@ -40,15 +40,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.compose.runtime.*
 import android.Manifest
-import android.content.Context
 import androidx.compose.runtime.LaunchedEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import nz.ac.canterbury.seng303.lab2.NotificationHandler
 import nz.ac.canterbury.seng303.lab2.models.Market
+import nz.ac.canterbury.seng303.lab2.scheduleWeeklyNotifications
 import nz.ac.canterbury.seng303.lab2.viewmodels.MarketViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -64,6 +63,8 @@ fun Home(navController: NavController, marketViewModel: MarketViewModel) {
     LaunchedEffect(key1 = true) {
         if (!postNotificationPermission.status.isGranted) {
             postNotificationPermission.launchPermissionRequest()
+        } else {
+            scheduleWeeklyNotifications(context, marketViewModel)
         }
     }
 
