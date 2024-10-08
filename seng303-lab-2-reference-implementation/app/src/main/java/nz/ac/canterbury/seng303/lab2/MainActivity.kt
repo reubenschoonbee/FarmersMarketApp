@@ -39,6 +39,8 @@ class MainActivity : ComponentActivity() {
 
     private val marketViewModel: MarketViewModel by koinViewModel()
     private val stallViewModel: StallViewModel by koinViewModel()
+    val userViewModel: UserViewModel by koinViewModel()
+
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,11 +55,11 @@ class MainActivity : ComponentActivity() {
         // Load the test data if none exist
         marketViewModel.loadDefaultNotesIfNoneExist()
         stallViewModel.loadDefaultNotesIfNoneExist()
+        userViewModel.loadDefaultNotesIfNoneExist()
 
         setContent {
             Lab1Theme {
                 val navController = rememberNavController()
-                val userViewModel: UserViewModel by koinViewModel()
                 val isLoggedIn by userViewModel.isLoggedIn.collectAsState()
 
                 Scaffold(
