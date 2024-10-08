@@ -22,16 +22,16 @@ class Stall(
                     "Sunny Seeds",
                     "Flowers",
                     listOf(
-                        Product(1, "Roses", "Fresh red roses", 2.5),
-                        Product(2, "Tulips", "Colorful tulips", 1.5),
-                        Product(3, "Daisies", "Bright yellow daisies", 2.0),
-                        Product(4, "Lilies", "Fragrant white lilies", 3.0),
-                        Product(5, "Sunflowers", "Tall and cheerful sunflowers", 4.0),
-                        Product(6, "Chrysanthemums", "Vibrant chrysanthemums", 3.5),
-                        Product(7, "Orchids", "Exotic orchids", 5.0),
-                        Product(8, "Gerberas", "Colorful gerbera flowers", 2.8),
-                        Product(9, "Carnations", "Classic carnations", 2.2),
-                        Product(10, "Iris", "Beautiful blue irises", 3.5)
+                        Product(1, "Roses", "Fresh red roses", 2.5, R.drawable.product_roses, 5),
+                        Product(2, "Tulips", "Colorful tulips", 1.5, R.drawable.product_tulips, 20),
+                        Product(3, "Daisies", "Bright yellow daisies", 2.0, R.drawable.product_daises, 0),
+                        Product(4, "Lilies", "Fragrant white lilies", 3.0, R.drawable.product_lilies, 0),
+                        Product(5, "Sunflowers", "Tall and cheerful sunflowers", 4.0, R.drawable.product_sunflower, 19),
+                        Product(6, "Chrysanthemums", "Vibrant chrysanthemums", 3.5, R.drawable.product_chrysanthemums, 0),
+                        Product(7, "Orchids", "Exotic orchids", 5.0, R.drawable.product_orchid, 8),
+                        Product(8, "Gerberas", "Colorful gerbera flowers", 2.8, R.drawable.product_gerberas, 20),
+                        Product(9, "Carnations", "Classic carnations", 2.2, R.drawable.product_carnations, 20),
+                        Product(10, "Iris", "Beautiful blue irises", 3.5, R.drawable.product_iris, 4)
                     ),
                     marketIds = listOf(2, 4),
                     R.drawable.stall_sunny_seeds
@@ -79,12 +79,7 @@ class Stall(
                     "Sausage Sizzle",
                     "Sausages",
                     listOf(
-                        Product(
-                            31,
-                            "Grilled Sausage",
-                            "Delicious grilled sausage on a bun",
-                            5.5
-                        ),
+                        Product(31, "Grilled Sausage", "Delicious grilled sausage on a bun", 5.5),
                         Product(32, "Condiments", "Various sauces and toppings", 0.5),
                         Product(33, "Veggie Sausage", "Grilled veggie sausage", 5.0),
                         Product(34, "Cheese Kransky", "Cheese-filled sausage", 6.0),
@@ -128,12 +123,7 @@ class Stall(
                         Product(54, "Seaweed", "Fresh seaweed salad", 7.0),
                         Product(55, "Fish Tacos", "Tacos filled with grilled fish", 8.0),
                         Product(56, "Crab Cakes", "Crispy crab cakes", 10.0),
-                        Product(
-                            57,
-                            "Shrimp Cocktail",
-                            "Chilled shrimp with cocktail sauce",
-                            12.0
-                        ),
+                        Product(57, "Shrimp Cocktail", "Chilled shrimp with cocktail sauce", 12.0),
                         Product(58, "Seafood Paella", "Mixed seafood rice dish", 14.0),
                         Product(59, "Fish & Chips", "Classic fish and chips", 11.0),
                         Product(60, "Clam Chowder", "Creamy clam chowder", 6.0)
@@ -185,12 +175,7 @@ class Stall(
                     "Olives",
                     listOf(
                         Product(81, "Extra Virgin Olive Oil", "High-quality olive oil", 10.0),
-                        Product(
-                            82,
-                            "Stuffed Olives",
-                            "Delicious olives stuffed with herbs",
-                            5.0
-                        ),
+                        Product(82, "Stuffed Olives", "Delicious olives stuffed with herbs", 5.0),
                         Product(83, "Olive Tapenade", "Savory olive spread", 6.0),
                         Product(84, "Marinated Olives", "Flavorful marinated olives", 4.0),
                         Product(85, "Olive Bruschetta", "Bruschetta with olives", 5.0),
