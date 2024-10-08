@@ -10,8 +10,10 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.FlowPreview
 import nz.ac.canterbury.seng303.lab2.models.Market
 import nz.ac.canterbury.seng303.lab2.models.Stall
+import nz.ac.canterbury.seng303.lab2.models.User
 import nz.ac.canterbury.seng303.lab2.viewmodels.MarketViewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
+import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -43,6 +45,15 @@ val dataAccessModule = module {
         )
     }
 
+    single<Storage<User>>(named("userStorage")) {
+        PersistentStorage(
+            gson = get(),
+            type = object : TypeToken<List<User>>() {}.type,
+            preferenceKey = stringPreferencesKey("user"),
+            dataStore = androidContext().dataStore
+        )
+    }
+
     viewModel {
         MarketViewModel(
             marketStorage = get(named("marketStorage"))
@@ -52,6 +63,12 @@ val dataAccessModule = module {
     viewModel {
         StallViewModel(
             stallStorage = get(named("stallStorage"))
+        )
+    }
+
+    viewModel {
+        UserViewModel(
+            userStorage = get(named("userStorage"))
         )
     }
 }
