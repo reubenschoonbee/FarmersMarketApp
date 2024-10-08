@@ -32,6 +32,11 @@ import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 import nz.ac.canterbury.seng303.lab2.screens.LoginScreen
 import nz.ac.canterbury.seng303.lab2.screens.RegisterScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel as koinViewModel
+import nz.ac.canterbury.seng303.lab2.screens.Home
+import nz.ac.canterbury.seng303.lab2.screens.ProductDetailScreen
+import nz.ac.canterbury.seng303.lab2.screens.StallsScreen
+import nz.ac.canterbury.seng303.lab2.viewmodels.MarketViewModel
+
 
 class MainActivity : ComponentActivity() {
 
@@ -92,13 +97,20 @@ class MainActivity : ComponentActivity() {
                             composable("Home") {
                                 Home(navController = navController, marketViewModel)
                             }
+
+                            composable("StallsScreen/{marketId}") { backStackEntry ->
+                                val marketId = backStackEntry.arguments?.getString("marketId")?.toInt()
+                                StallsScreen(navController = navController, stallViewModel = stallViewModel, marketId = marketId)
+                            }
+
                             composable("ProductsScreen/{stallId}") { backStackEntry ->
                                 val stallId = backStackEntry.arguments?.getString("stallId")?.toInt()
                                 stallId?.let { ProductsScreen(navController, it, stallViewModel) }
                             }
-                            composable("StallsScreen/{marketId}") { backStackEntry ->
-                                val marketId = backStackEntry.arguments?.getString("marketId")?.toInt()
-                                StallsScreen(navController = navController, stallViewModel = stallViewModel, marketId = marketId)
+
+                            composable("ProductDetailScreen/{productId}") { backStackEntry ->
+                                val productId = backStackEntry.arguments?.getString("productId")?.toInt()
+                                productId?.let{ProductDetailScreen(navController = navController, stallViewModel = stallViewModel, productId = productId)}
                             }
                             composable("AuthOptionsScreen") {
                                 AuthOptionsScreen(navController)

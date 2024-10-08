@@ -1,5 +1,15 @@
 <resources>
     <string name="app_name">Market Finder</string>
+    <string name="market1">South Christchurch Farmers\' Market</string>
+    <string name="market1_description">Christchurch\'\s best market for fresh, local &amp; mostly organic produce</string>
+    <string name="market2_description">One of Canterbury’s original food markets since 2004 situated under 100 year old trees beside the Avon river.</string>
+    <string name="market2">Christchurch Farmers\' Market</string>
+    <string name="market1_open_times">Sunday 9am - 12am</string>
+    <string name="market2_open_times">Saturday 9am - 12pm</string>
+    <string name="market1_address">66 Colombo Street (next to Christchurch South Library) Christchurch, New Zealand 8022 </string>
+    <string name="market2_address">Christchurch Farmers\' Market, 16 Kahu Road, Fendalton, Christchurch 8041</string>
+    <string name="market2_location"> Riccarton House &amp; Bush</string>
+    <string name="market1_location"> Next to Christchurch South Library</string>
 
     <!-- Stall Names -->
     <string name="stall_sunny_seeds">Sunny Seeds</string>
