@@ -100,7 +100,7 @@ fun calculateInitialDelay(market: Market): Long {
     // Edge case: if delay is negative (market opens in less than 24 hours), send a notification after a minute
     Log.d("Notification scheduler", "$delayInMillis" )
     if (delayInMillis < 0) {
-        return TimeUnit.MINUTES.toMillis(1) // Schedule for 1 minute later
+        return TimeUnit.SECONDS.toMillis(30) // Schedule for 1 minute later
     }
     return TimeUnit.MILLISECONDS.toMillis(delayInMillis)
 }
