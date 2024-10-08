@@ -17,14 +17,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import nz.ac.canterbury.seng303.lab2.models.Stall
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
 
 @Composable
 fun ProductDetailScreen(navController: NavHostController, stallViewModel: StallViewModel, productId: Int) {
     val selectedStallState by stallViewModel.selectedStall.collectAsState(null)
-    val stall: Stall? = selectedStallState
-    val product = stall?.products?.find { it.id == productId }
+    val product = selectedStallState?.products?.find { it.id == productId }
     var selectedQuantity by remember { mutableStateOf(1) }
 
     if (product != null) {
