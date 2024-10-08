@@ -64,7 +64,7 @@ fun Home(navController: NavController, marketViewModel: MarketViewModel) {
         if (!postNotificationPermission.status.isGranted) {
             postNotificationPermission.launchPermissionRequest()
         } else {
-            scheduleWeeklyNotifications(context, marketViewModel)
+            scheduleWeeklyNotifications(context, markets)
         }
     }
 
@@ -75,10 +75,6 @@ fun Home(navController: NavController, marketViewModel: MarketViewModel) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = {
-            notificationHandler.showSimpleNotification()
-        }) { Text(text = "Simple notification") }
-
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
