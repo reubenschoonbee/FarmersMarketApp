@@ -1,6 +1,8 @@
 package nz.ac.canterbury.seng303.lab2.viewmodels
 
 import android.util.Log
+import android.widget.Toast
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Deferred
@@ -22,6 +24,7 @@ class UserViewModel(private val userStorage: Storage<User>) : ViewModel() {
 
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn: StateFlow<Boolean> get() = _isLoggedIn
+
 
     init {
         getUsers() // Load users on initialization
