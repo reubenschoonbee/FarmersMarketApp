@@ -49,7 +49,7 @@ class Market (
                     name = "Cambridge Farmers Market",
                     description = "Local farmers selling fresh produce.",
                     openTimes = "Saturday 8:10am - midday",
-                    openTimesForCalender = "Saturday, 08:10",
+                    openTimesForCalender = "Saturday, 08:00",
                     location = "67 Queen St, Leamington, Cambridge",
                     address = "67 Queen St, Leamington, Cambridge"
                 )
