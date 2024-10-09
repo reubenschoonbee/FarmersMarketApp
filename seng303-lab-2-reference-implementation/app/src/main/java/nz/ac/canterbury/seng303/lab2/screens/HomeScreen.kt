@@ -27,7 +27,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,35 +35,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import android.Manifest
+import android.content.Context
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import nz.ac.canterbury.seng303.lab2.NotificationHandler
 import nz.ac.canterbury.seng303.lab2.models.Market
 import nz.ac.canterbury.seng303.lab2.scheduleWeeklyNotifications
-import nz.ac.canterbury.seng303.lab2.viewmodels.MarketViewModel
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun Home(navController: NavController, marketViewModel: MarketViewModel) {
-    marketViewModel.getMarkets()
-    val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
-    val context = LocalContext.current
-    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-    val notificationHandler = NotificationHandler(context)
+fun Home(
+    navController: NavController,
+    markets: List<Market>,
+    context: Context,
+    notificationToggle: MutableState<Boolean>,
+) {
 
-    LaunchedEffect(key1 = true) {
+    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+    val isNotificationScheduled = remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = notificationToggle.value) {
         if (!postNotificationPermission.status.isGranted) {
             postNotificationPermission.launchPermissionRequest()
-        } else {
-            scheduleWeeklyNotifications(context, markets)
+            }
+        else if (notificationToggle.value) {
+            scheduleWeeklyNotifications(context, markets, notificationToggle.value)
+            notificationToggle.value = false
+
         }
     }
 
@@ -92,7 +96,7 @@ fun Home(navController: NavController, marketViewModel: MarketViewModel) {
         ) {
             // Create the list of market cards
             items(markets) { market ->
-                MarketCard(market, navController)
+                MarketCard(market, navController, context)
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -101,10 +105,10 @@ fun Home(navController: NavController, marketViewModel: MarketViewModel) {
 }
 
 @Composable
-fun MarketCard(market: Market, navController: NavController) {
+fun MarketCard(market: Market, navController: NavController, context: Context) {
     val isExpanded: Boolean = if (market.id == 1) true else false
     var expanded by rememberSaveable { mutableStateOf(isExpanded) }
-    val context = LocalContext.current
+//    val context = LocalContext.current
 
 
 

@@ -1,8 +1,10 @@
 package nz.ac.canterbury.seng303.lab2
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,10 +19,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import nz.ac.canterbury.seng303.lab2.models.Market
 import nz.ac.canterbury.seng303.lab2.screens.AuthOptionsScreen
 import nz.ac.canterbury.seng303.lab2.screens.Home
 import nz.ac.canterbury.seng303.lab2.screens.ProductsScreen
@@ -44,6 +50,7 @@ class MainActivity : ComponentActivity() {
     val userViewModel: UserViewModel by koinViewModel()
 
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +70,10 @@ class MainActivity : ComponentActivity() {
             Lab1Theme {
                 val navController = rememberNavController()
                 val isLoggedIn by userViewModel.isLoggedIn.collectAsState()
-
+                val context = LocalContext.current
+                val notificationToggle = remember { mutableStateOf(true) }
+                marketViewModel.getMarkets()
+                val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -106,7 +116,7 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(it)) {
                         NavHost(navController = navController, startDestination = "Home") {
                             composable("Home") {
-                                Home(navController = navController, marketViewModel)
+                                Home(navController = navController, markets, context, notificationToggle)
                             }
 
                             composable("StallsScreen/{marketId}") { backStackEntry ->

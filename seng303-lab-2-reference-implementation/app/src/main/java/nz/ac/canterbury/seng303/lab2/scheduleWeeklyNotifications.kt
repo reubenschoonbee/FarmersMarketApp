@@ -1,7 +1,5 @@
 package nz.ac.canterbury.seng303.lab2
-
-import android.content.Context
-import android.util.Log
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import nz.ac.canterbury.seng303.lab2.models.Market
@@ -11,11 +9,9 @@ import androidx.work.Data
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import android.content.Context
 
-
-fun scheduleWeeklyNotifications(context: Context, markets: List<Market>) {
-    // Use WorkManager to schedule notifications
-
+fun scheduleWeeklyNotifications(context: Context, markets: List<Market>, value: Boolean) {
     val workManager = WorkManager.getInstance(context)
 
     markets.forEach { market ->
@@ -28,29 +24,35 @@ fun scheduleWeeklyNotifications(context: Context, markets: List<Market>) {
             .build()
 
         // Calculate the delay for this market
-        val initialDelay = calculateInitialDelay(market)
+        val delayInMillis = calculateInitialDelay(market)
 
-        // Create a WorkRequest with the calculated delay
-        val workRequest = PeriodicWorkRequestBuilder<NotificationWorker>(7, TimeUnit.DAYS)
-            .setInputData(data)
-            .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
-            .build()
+        if (delayInMillis < TimeUnit.HOURS.toMillis(24)) {
+            // Case where market is opening in less than 24 hours, send a notification in 30 seconds
+            val oneTimeWorkRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+                .setInputData(data)
+                .setInitialDelay(1, TimeUnit.SECONDS)
+                .build()
 
-        // Enqueue the WorkRequest
-        workManager.enqueue(workRequest)
+            // Enqueue the OneTimeWorkRequest for immediate notification
+            workManager.enqueue(oneTimeWorkRequest)
+
+        } else {
+            // Case where market is opening in more than 24 hours, send the notification 24 hours before opening
+            val periodicWorkRequest = PeriodicWorkRequestBuilder<NotificationWorker>(7, TimeUnit.DAYS)
+                .setInputData(data)
+                .setInitialDelay(delayInMillis - TimeUnit.HOURS.toMillis(24), TimeUnit.MILLISECONDS)
+                .build()
+
+            // Enqueue the PeriodicWorkRequest
+            workManager.enqueue(periodicWorkRequest)
+        }
     }
 }
-// Serialize market data to JSON
-private fun serializeMarkets(markets: List<Market>): String {
-    val gson = Gson()
-    return gson.toJson(markets)
-}
-// Calculate the initial delay based on market opening times
 
-// Helper function to calculate the delay
+// Helper function to calculate the initial delay
 fun calculateInitialDelay(market: Market): Long {
     val calendar = Calendar.getInstance()
-    Log.d("weekly notification", "${market.openTimesForCalender}")
+
     // Parse the market's open day and time (e.g., "Sunday" and "09:00")
     val openDay = market.openTimesForCalender.split(",")[0].trim() // Extract the day (e.g., "Sunday")
     val openTime = market.openTimesForCalender.split(",")[1].trim() // Extract the time (e.g., "09:00")
@@ -67,7 +69,7 @@ fun calculateInitialDelay(market: Market): Long {
         else -> throw IllegalArgumentException("Invalid day: $openDay")
     }
 
-    // Set the calendar to the next occurrence of the market's open day and time
+    // Get the current day of the week
     val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
     val daysUntilNextOpen = if (dayOfWeek >= currentDayOfWeek) {
         dayOfWeek - currentDayOfWeek
@@ -92,15 +94,19 @@ fun calculateInitialDelay(market: Market): Long {
     calendar.set(Calendar.MINUTE, openMinute)
     calendar.set(Calendar.SECOND, 0)
 
-    // Subtract 24 hours for the notification time
-    calendar.add(Calendar.HOUR_OF_DAY, -24)
-
-    // Calculate the delay from the current time
+    // Calculate the delay in milliseconds from the current time to the next market opening time
     val delayInMillis = calendar.timeInMillis - System.currentTimeMillis()
-    // Edge case: if delay is negative (market opens in less than 24 hours), send a notification after a minute
-    Log.d("Notification scheduler", "$delayInMillis" )
-    if (delayInMillis < 0) {
-        return TimeUnit.SECONDS.toMillis(30) // Schedule for 1 minute later
+
+    // If the market opens in less than 24 hours, return the time until the opening
+    return if (delayInMillis < TimeUnit.HOURS.toMillis(24)) {
+        delayInMillis
+    } else {
+        delayInMillis - TimeUnit.HOURS.toMillis(24)
     }
-    return TimeUnit.MILLISECONDS.toMillis(delayInMillis)
+}
+
+// Serialize market data to JSON
+private fun serializeMarkets(markets: List<Market>): String {
+    val gson = Gson()
+    return gson.toJson(markets)
 }

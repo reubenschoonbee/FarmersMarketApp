@@ -31,7 +31,7 @@ class NotificationHandler(private val context: Context) {
                 .setContentTitle("Market Opening Reminder")
                 .setContentText("The market '$marketName' opens at: $openingTimes")
                 .setSmallIcon(R.drawable.round_notifications_24)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .build()  // Finalizes the creation
