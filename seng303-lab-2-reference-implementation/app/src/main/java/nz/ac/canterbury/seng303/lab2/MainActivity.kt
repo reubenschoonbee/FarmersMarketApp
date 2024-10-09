@@ -1,8 +1,10 @@
 package nz.ac.canterbury.seng303.lab2
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,8 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -36,7 +39,10 @@ import nz.ac.canterbury.seng303.lab2.screens.PreferencesScreen
 import nz.ac.canterbury.seng303.lab2.screens.RegisterScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel as koinViewModel
 import nz.ac.canterbury.seng303.lab2.screens.ProductDetailScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.ThemeViewModel
+import androidx.compose.ui.platform.LocalContext
+import nz.ac.canterbury.seng303.lab2.models.Market
 
 
 class MainActivity : ComponentActivity() {
@@ -45,7 +51,7 @@ class MainActivity : ComponentActivity() {
     private val stallViewModel: StallViewModel by koinViewModel()
     val userViewModel: UserViewModel by koinViewModel()
 
-
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,11 +70,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             val themeViewModel: ThemeViewModel = viewModel()
             val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+            val context = LocalContext.current
+            val notificationToggle = remember { mutableStateOf(true) }
+            marketViewModel.getMarkets()
+            val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
 
             Lab1Theme(isDarkTheme) {
                 val navController = rememberNavController()
                 val isLoggedIn by userViewModel.isLoggedIn.collectAsState()
-
 
                 Scaffold(
                     topBar = {
@@ -110,7 +119,7 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(it)) {
                         NavHost(navController = navController, startDestination = "Home") {
                             composable("Home") {
-                                Home(navController = navController, marketViewModel)
+                                Home(navController = navController, markets, context, notificationToggle)
                             }
 
                             composable("StallsScreen/{marketId}") { backStackEntry ->
