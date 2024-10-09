@@ -69,7 +69,7 @@ fun LoginScreen(userViewModel: UserViewModel, navController: NavController) {
                         if (loginSuccessful) {
                             Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
                             navController.navigate("Home") {
-                                popUpTo("Login") { inclusive = true }
+                                popUpTo("Home") { inclusive = true }
                             }
                         } else {
                             errorMessage = "Invalid username or password"
