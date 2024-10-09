@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
@@ -16,13 +17,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import nz.ac.canterbury.seng303.lab2.models.User
+import nz.ac.canterbury.seng303.lab2.viewmodels.ThemeViewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 
 @Composable
-fun PreferencesScreen(userViewModel: UserViewModel, navController: NavController) {
+fun PreferencesScreen(userViewModel: UserViewModel, navController: NavController, themeViewModel: ThemeViewModel) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val currentUser by userViewModel.currentUser.collectAsState()
+    val isLoggedIn by userViewModel.isLoggedIn.collectAsState()
+    val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -32,12 +36,22 @@ fun PreferencesScreen(userViewModel: UserViewModel, navController: NavController
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Preferences")
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { showDialog = true }) {
-            Text("Edit Profile")
+        if (isLoggedIn) {
+            Button(onClick = { showDialog = true }) {
+                Text("Edit Profile")
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Dark Mode  ")
+            Switch(
+                checked = isDarkTheme,
+                onCheckedChange = { themeViewModel.toggleTheme() }
+            )
         }
 
         if (showDialog) {

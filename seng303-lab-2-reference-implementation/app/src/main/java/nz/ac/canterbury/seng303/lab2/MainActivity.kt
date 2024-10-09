@@ -18,6 +18,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -35,6 +36,7 @@ import nz.ac.canterbury.seng303.lab2.screens.PreferencesScreen
 import nz.ac.canterbury.seng303.lab2.screens.RegisterScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel as koinViewModel
 import nz.ac.canterbury.seng303.lab2.screens.ProductDetailScreen
+import nz.ac.canterbury.seng303.lab2.viewmodels.ThemeViewModel
 
 
 class MainActivity : ComponentActivity() {
@@ -60,9 +62,13 @@ class MainActivity : ComponentActivity() {
         userViewModel.loadDefaultNotesIfNoneExist()
 
         setContent {
-            Lab1Theme {
+            val themeViewModel: ThemeViewModel = viewModel()
+            val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+
+            Lab1Theme(isDarkTheme) {
                 val navController = rememberNavController()
                 val isLoggedIn by userViewModel.isLoggedIn.collectAsState()
+
 
                 Scaffold(
                     topBar = {
@@ -77,15 +83,13 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             actions = {
-                                if (isLoggedIn) {
-                                    IconButton(onClick = {
-                                        navController.navigate("PreferencesScreen")
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Settings,
-                                            contentDescription = "Settings"
-                                        )
-                                    }
+                                IconButton(onClick = {
+                                    navController.navigate("PreferencesScreen")
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Settings,
+                                        contentDescription = "Settings"
+                                    )
                                 }
                                 IconButton(onClick = {
                                     if (isLoggedIn) {
@@ -149,7 +153,7 @@ class MainActivity : ComponentActivity() {
                                 RegisterScreen(userViewModel, navController)
                             }
                             composable("PreferencesScreen") {
-                                PreferencesScreen(userViewModel, navController)
+                                PreferencesScreen(userViewModel, navController, themeViewModel)
                             }
                         }
                     }
