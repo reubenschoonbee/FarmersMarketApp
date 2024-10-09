@@ -22,11 +22,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import nz.ac.canterbury.seng303.lab2.models.Market
 import nz.ac.canterbury.seng303.lab2.screens.AuthOptionsScreen
 import nz.ac.canterbury.seng303.lab2.screens.Home
 import nz.ac.canterbury.seng303.lab2.screens.ProductsScreen
@@ -41,6 +39,10 @@ import nz.ac.canterbury.seng303.lab2.screens.PreferencesScreen
 import nz.ac.canterbury.seng303.lab2.screens.RegisterScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel as koinViewModel
 import nz.ac.canterbury.seng303.lab2.screens.ProductDetailScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import nz.ac.canterbury.seng303.lab2.viewmodels.ThemeViewModel
+import androidx.compose.ui.platform.LocalContext
+import nz.ac.canterbury.seng303.lab2.models.Market
 
 
 class MainActivity : ComponentActivity() {
@@ -48,7 +50,6 @@ class MainActivity : ComponentActivity() {
     private val marketViewModel: MarketViewModel by koinViewModel()
     private val stallViewModel: StallViewModel by koinViewModel()
     val userViewModel: UserViewModel by koinViewModel()
-
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @OptIn(ExperimentalMaterial3Api::class)
@@ -67,13 +68,17 @@ class MainActivity : ComponentActivity() {
         userViewModel.loadDefaultNotesIfNoneExist()
 
         setContent {
-            Lab1Theme {
+            val themeViewModel: ThemeViewModel = viewModel()
+            val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
+            val context = LocalContext.current
+            val notificationToggle = remember { mutableStateOf(true) }
+            marketViewModel.getMarkets()
+            val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
+
+            Lab1Theme(isDarkTheme) {
                 val navController = rememberNavController()
                 val isLoggedIn by userViewModel.isLoggedIn.collectAsState()
-                val context = LocalContext.current
-                val notificationToggle = remember { mutableStateOf(true) }
-                marketViewModel.getMarkets()
-                val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
+
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -87,15 +92,13 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             actions = {
-                                if (isLoggedIn) {
-                                    IconButton(onClick = {
-                                        navController.navigate("PreferencesScreen")
-                                    }) {
-                                        Icon(
-                                            imageVector = Icons.Default.Settings,
-                                            contentDescription = "Settings"
-                                        )
-                                    }
+                                IconButton(onClick = {
+                                    navController.navigate("PreferencesScreen")
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Settings,
+                                        contentDescription = "Settings"
+                                    )
                                 }
                                 IconButton(onClick = {
                                     if (isLoggedIn) {
@@ -159,7 +162,7 @@ class MainActivity : ComponentActivity() {
                                 RegisterScreen(userViewModel, navController)
                             }
                             composable("PreferencesScreen") {
-                                PreferencesScreen(userViewModel, navController)
+                                PreferencesScreen(userViewModel, navController, themeViewModel)
                             }
                         }
                     }
