@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +31,7 @@ import nz.ac.canterbury.seng303.lab2.viewmodels.MarketViewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 import nz.ac.canterbury.seng303.lab2.screens.LoginScreen
+import nz.ac.canterbury.seng303.lab2.screens.PreferencesScreen
 import nz.ac.canterbury.seng303.lab2.screens.RegisterScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel as koinViewModel
 import nz.ac.canterbury.seng303.lab2.screens.ProductDetailScreen
@@ -75,6 +77,16 @@ class MainActivity : ComponentActivity() {
                                 }
                             },
                             actions = {
+                                if (isLoggedIn) {
+                                    IconButton(onClick = {
+                                        navController.navigate("PreferencesScreen")
+                                    }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Settings,
+                                            contentDescription = "Settings"
+                                        )
+                                    }
+                                }
                                 IconButton(onClick = {
                                     if (isLoggedIn) {
                                         navController.navigate("MyProfileScreen")
@@ -98,18 +110,31 @@ class MainActivity : ComponentActivity() {
                             }
 
                             composable("StallsScreen/{marketId}") { backStackEntry ->
-                                val marketId = backStackEntry.arguments?.getString("marketId")?.toInt()
-                                StallsScreen(navController = navController, stallViewModel = stallViewModel, marketId = marketId)
+                                val marketId =
+                                    backStackEntry.arguments?.getString("marketId")?.toInt()
+                                StallsScreen(
+                                    navController = navController,
+                                    stallViewModel = stallViewModel,
+                                    marketId = marketId
+                                )
                             }
 
                             composable("ProductsScreen/{stallId}") { backStackEntry ->
-                                val stallId = backStackEntry.arguments?.getString("stallId")?.toInt()
+                                val stallId =
+                                    backStackEntry.arguments?.getString("stallId")?.toInt()
                                 stallId?.let { ProductsScreen(navController, it, stallViewModel) }
                             }
 
                             composable("ProductDetailScreen/{productId}") { backStackEntry ->
-                                val productId = backStackEntry.arguments?.getString("productId")?.toInt()
-                                productId?.let{ProductDetailScreen(navController = navController, stallViewModel = stallViewModel, productId = productId)}
+                                val productId =
+                                    backStackEntry.arguments?.getString("productId")?.toInt()
+                                productId?.let {
+                                    ProductDetailScreen(
+                                        navController = navController,
+                                        stallViewModel = stallViewModel,
+                                        productId = productId
+                                    )
+                                }
                             }
                             composable("AuthOptionsScreen") {
                                 AuthOptionsScreen(navController)
@@ -122,6 +147,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("RegisterScreen") {
                                 RegisterScreen(userViewModel, navController)
+                            }
+                            composable("PreferencesScreen") {
+                                PreferencesScreen(userViewModel, navController)
                             }
                         }
                     }
