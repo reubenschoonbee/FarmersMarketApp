@@ -90,7 +90,7 @@ fun RegisterScreen(userViewModel: UserViewModel, navController: NavController) {
                         if (loginSuccessful) {
                             Toast.makeText(context, "Sign up successful", Toast.LENGTH_SHORT).show()
                             navController.navigate("Home") {
-                                popUpTo("Login") { inclusive = true }
+                                popUpTo("Home") { inclusive = true }
                             }
                         } else {
                             errorMessage = "Couldn't log in user after registration"

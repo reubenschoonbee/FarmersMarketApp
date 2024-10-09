@@ -25,6 +25,9 @@ class UserViewModel(private val userStorage: Storage<User>) : ViewModel() {
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn: StateFlow<Boolean> get() = _isLoggedIn
 
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser
+
 
     init {
         getUsers() // Load users on initialization
@@ -61,6 +64,7 @@ class UserViewModel(private val userStorage: Storage<User>) : ViewModel() {
         isAuthenticated = user != null
         if (isAuthenticated) {
             _isLoggedIn.emit(true)
+            _currentUser.emit(user)
         }
         return isAuthenticated
     }
@@ -90,7 +94,25 @@ class UserViewModel(private val userStorage: Storage<User>) : ViewModel() {
         }
     }
 
+
+    fun updateUser(userId: Int, user: User) = viewModelScope.launch {
+        if (userId != null) {
+            userStorage.edit(user.id, user).collect { result ->
+                if (result == 1) {
+                    Log.d("USER_VIEW_MODEL", "User updated successfully")
+                    _users.emit(userStorage.getAll().first())
+                    _currentUser.emit(user)
+                }
+                else {
+                    Log.e("USER_VIEW_MODEL", "Could not update user")
+                }
+            }
+        }
+
     }
+
+
+}
 
 
 
