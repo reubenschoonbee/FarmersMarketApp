@@ -6,7 +6,7 @@ import nz.ac.canterbury.seng303.lab2.datastore.dataAccessModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-class MainApplication: Application() {
+class MainApplication: NotificationApplication() {
 
     @OptIn(FlowPreview::class)
     override fun onCreate() {
