@@ -31,6 +31,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.platform.LocalContext
 import nz.ac.canterbury.seng303.lab2.models.Stall
 
 @Composable
@@ -105,6 +106,9 @@ fun StallCard(
     stall: Stall,
     modifier: Modifier = Modifier
 ) {
+    val baseUrl = "https://mohadesasharifi.github.io/Assignment2_seng303/"
+
+
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
@@ -153,6 +157,9 @@ fun StallCard(
                     Text("View Products")
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Share(text = "Check out ${stall.name} at our farmers market! Visit: $baseUrl", context = LocalContext.current)
         }
     }
 }
