@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalConfiguration
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.clip
 import androidx.navigation.NavHostController
 import nz.ac.canterbury.seng303.lab2.models.Product
@@ -38,7 +38,8 @@ fun ProductDetailScreen(
     val selectedStallState by stallViewModel.selectedStall.collectAsState(null)
     val product = selectedStallState?.products?.find { it.id == productId }
     val context = LocalContext.current
-    var selectedQuantity by remember { mutableStateOf(1) }
+    var selectedQuantity by rememberSaveable { mutableStateOf(1) }
+
 
     // Detect current orientation
     val configuration = LocalConfiguration.current
@@ -194,7 +195,7 @@ fun ProductDetails(
                 modifier = Modifier
                     .width(40.dp)
                     .background(Color.Transparent)
-                    .padding(13.dp),
+                    .padding(12.dp),
                 enabled = false
             )
 
