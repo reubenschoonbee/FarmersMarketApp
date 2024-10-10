@@ -17,14 +17,8 @@
     </style>
 </head>
 <body>
-    <h1>Welcome to the Farmers Market Stall!</h1>
-    <p>Here is some information about the stall:</p>
-    <ul>
-        <li><strong>Stall Name:</strong> Your Stall Name</li>
-        <li><strong>Description:</strong> A brief description of what you sell.</li>
-        <li><strong>Location:</strong> Where to find the stall in the market.</li>
-        <li><strong>Hours:</strong> Opening hours of the stall.</li>
-    </ul>
-    <p>If you are not redirected automatically, <a href="https://yourapp.com">click here</a> to view our app.</p>
+    <h1>Welcome to the Farmers Market!</h1>
+    <p>The app is currently under development and is not yet available for installation on Android.:</p>
+
 </body>
 </html>
