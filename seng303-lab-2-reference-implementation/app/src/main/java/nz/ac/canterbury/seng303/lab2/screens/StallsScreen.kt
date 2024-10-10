@@ -229,6 +229,7 @@ fun StallFilterComponent(
             }
         }
         Row {
+            val containerColor = Color(0xFFEAF4FB)
             TextField(
                 value = searchQuery,
                 onValueChange = onSearchQueryChange,
@@ -241,10 +242,12 @@ fun StallFilterComponent(
                     ),
                 placeholder = { Text("Search...", color = Color.Gray) },
                 shape = RoundedCornerShape(8.dp),
-                colors = TextFieldDefaults.textFieldColors(
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = containerColor,
+                    unfocusedContainerColor = containerColor,
+                    disabledContainerColor = containerColor,
                     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
                     unfocusedIndicatorColor = Color.Transparent,
-                    containerColor = Color(0xFFEAF4FB)
                 )
             )
 

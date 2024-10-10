@@ -41,6 +41,7 @@ fun ProductDetailScreen(
     var selectedQuantity by rememberSaveable { mutableStateOf(1) }
 
 
+
     // Detect current orientation
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -120,6 +121,8 @@ fun ProductDetailScreen(
                 )
             }
         }
+    } else {
+        Text(text = "Could not find product", style = MaterialTheme.typography.headlineMedium)
     }
 
 }

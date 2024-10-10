@@ -170,7 +170,7 @@ class MainActivity : ComponentActivity() {
                             composable("ProductsScreen/{stallId}") { backStackEntry ->
                                 val stallId =
                                     backStackEntry.arguments?.getString("stallId")?.toInt()
-                                stallId?.let { ProductsScreen(navController, it, stallViewModel) }
+                                stallId?.let { ProductsScreen(navController, it, stallViewModel, userViewModel) }
                             }
 
                             composable("ProductDetailScreen/{productId}") { backStackEntry ->
