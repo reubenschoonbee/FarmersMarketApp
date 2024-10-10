@@ -35,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
@@ -70,10 +71,30 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
                         .padding(end = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = stall.name,
-                        style = MaterialTheme.typography.headlineLarge,
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ){
+                        // Stall Name
+                        Text(
+                            text = stall.name,
+                            style = MaterialTheme.typography.headlineLarge,
+                        )
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        Image(
+                            painter = painterResource(id = R.drawable.review),
+                            contentDescription = "Review",
+                            modifier = Modifier
+                                .size(25.dp)
+                                .clickable { showReviewDialog = true },
+                            contentScale = ContentScale.Crop,
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -118,12 +139,32 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
                 .padding(16.dp)
                 .fillMaxWidth()) {
 
-                // Stall Name
-                Text(
-                    text = stall.name,
-                    style = MaterialTheme.typography.headlineLarge,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    // Stall Name
+                    Text(
+                        text = stall.name,
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Image(
+                        painter = painterResource(id = R.drawable.review),
+                        contentDescription = "Review",
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clickable { showReviewDialog = true },
+                        contentScale = ContentScale.Crop,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
+                    )
+                }
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -164,13 +205,6 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
                         }
                     }
                 }
-            }
-
-            Button(
-                onClick = { showReviewDialog = true },
-                //modifier = Modifier.align(Alignment.CenterHorizontally)
-            ) {
-                Text(text = "Reviews")
             }
 
             // Show the Review Dialog if the state is true
