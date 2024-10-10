@@ -17,6 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,7 +43,11 @@ import nz.ac.canterbury.seng303.lab2.screens.ProductDetailScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.ThemeViewModel
 import androidx.compose.ui.platform.LocalContext
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import nz.ac.canterbury.seng303.lab2.models.Market
+import android.Manifest
 
 
 class MainActivity : ComponentActivity() {
@@ -52,7 +57,7 @@ class MainActivity : ComponentActivity() {
     val userViewModel: UserViewModel by koinViewModel()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -71,9 +76,39 @@ class MainActivity : ComponentActivity() {
             val themeViewModel: ThemeViewModel = viewModel()
             val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
             val context = LocalContext.current
-            val notificationToggle = remember { mutableStateOf(true) }
+            val isFirstLaunch = remember { mutableStateOf(true) }
             marketViewModel.getMarkets()
             val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
+            val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+
+            val isPermissionGranted = remember { mutableStateOf(false) }
+
+            // LaunchedEffect to request permission
+            LaunchedEffect(Unit) {
+                if (!postNotificationPermission.status.isGranted) {
+                    postNotificationPermission.launchPermissionRequest()
+                }
+            }
+
+            // LaunchedEffect to check permission status
+            LaunchedEffect(postNotificationPermission.status) {
+                if (postNotificationPermission.status.isGranted) {
+                    isPermissionGranted.value = true
+                } else {
+                    isPermissionGranted.value = false
+                }
+            }
+
+            // LaunchedEffect to schedule notifications when permission is granted
+            LaunchedEffect(isPermissionGranted.value) {
+                if (isPermissionGranted.value) {
+                    scheduleWeeklyNotifications(context, markets)
+                }
+            }
+
+
+
+
 
             Lab1Theme(isDarkTheme) {
                 val navController = rememberNavController()
@@ -119,7 +154,7 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(it)) {
                         NavHost(navController = navController, startDestination = "Home") {
                             composable("Home") {
-                                Home(navController = navController, markets, context, notificationToggle)
+                                Home(navController = navController, markets, context)
                             }
 
                             composable("StallsScreen/{marketId}") { backStackEntry ->
@@ -162,7 +197,7 @@ class MainActivity : ComponentActivity() {
                                 RegisterScreen(userViewModel, navController)
                             }
                             composable("PreferencesScreen") {
-                                PreferencesScreen(userViewModel, navController, themeViewModel)
+                                PreferencesScreen(userViewModel, navController, themeViewModel, isPermissionGranted)
                             }
                         }
                     }
