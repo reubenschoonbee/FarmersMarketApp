@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.draw.clip
 import androidx.navigation.NavHostController
 import nz.ac.canterbury.seng303.lab2.models.Product
 import nz.ac.canterbury.seng303.lab2.models.Stall
@@ -88,8 +89,6 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
                 }
             }
         }
-    } else {
-        Text(text = "Could not find stall", style = MaterialTheme.typography.headlineMedium)
     }
 }
 
@@ -105,7 +104,7 @@ fun ProductItem(product: Product) {
         Image(
             painter = painterResource(id = product.imageResId),
             contentDescription = product.name,
-            modifier = Modifier.size(100.dp),
+            modifier = Modifier.size(100.dp).clip(RoundedCornerShape(10.dp)),
             contentScale = ContentScale.Crop
         )
         Text(text = product.name, style = MaterialTheme.typography.bodyMedium)
@@ -117,11 +116,6 @@ fun ProductGridItem(navController: NavHostController,product: Product) {
     Column(
         modifier = Modifier
             .padding(8.dp)
-            .border(
-                BorderStroke(1.dp, Color.Gray),
-                shape = RoundedCornerShape(8.dp)
-            )
-            .background(Color.White)
             .clickable {
                 navController.navigate("ProductDetailScreen/${product.id}")
             }
@@ -134,7 +128,8 @@ fun ProductGridItem(navController: NavHostController,product: Product) {
             contentDescription = product.name,
             modifier = Modifier
                 .size(100.dp)
-                .padding(4.dp),
+                .padding(4.dp)
+                .clip(RoundedCornerShape(40.dp)),
             contentScale = ContentScale.Crop
         )
         Text(

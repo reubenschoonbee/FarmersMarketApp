@@ -179,6 +179,7 @@ class MainActivity : ComponentActivity() {
                                 productId?.let {
                                     ProductDetailScreen(
                                         navController = navController,
+                                        userViewModel = userViewModel,
                                         stallViewModel = stallViewModel,
                                         productId = productId
                                     )
