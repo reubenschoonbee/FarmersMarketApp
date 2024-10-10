@@ -264,7 +264,7 @@ fun ReviewItem(review: Review) {
     Column(modifier = Modifier.padding(8.dp)) {
         Text(
             //text = "${review.username} (${SimpleDateFormat("dd/MM/yyyy").format(Date(review.timestamp))})",
-            text = "${review.username}",
+            text = review.username,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
         )

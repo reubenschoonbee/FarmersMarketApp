@@ -23,14 +23,12 @@ import android.content.res.Configuration
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.clip
-import androidx.navigation.NavHostController
 import nz.ac.canterbury.seng303.lab2.models.Product
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 
 @Composable
 fun ProductDetailScreen(
-    navController: NavHostController,
     userViewModel: UserViewModel,
     stallViewModel: StallViewModel,
     productId: Int

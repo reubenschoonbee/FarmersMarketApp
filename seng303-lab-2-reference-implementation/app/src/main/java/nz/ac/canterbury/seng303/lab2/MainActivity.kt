@@ -178,7 +178,6 @@ class MainActivity : ComponentActivity() {
                                     backStackEntry.arguments?.getString("productId")?.toInt()
                                 productId?.let {
                                     ProductDetailScreen(
-                                        navController = navController,
                                         userViewModel = userViewModel,
                                         stallViewModel = stallViewModel,
                                         productId = productId
