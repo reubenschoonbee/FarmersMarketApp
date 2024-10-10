@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import nz.ac.canterbury.seng303.lab2.models.User
@@ -21,7 +20,7 @@ import nz.ac.canterbury.seng303.lab2.viewmodels.ThemeViewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 
 @Composable
-fun PreferencesScreen(userViewModel: UserViewModel, navController: NavController, themeViewModel: ThemeViewModel) {
+fun PreferencesScreen(userViewModel: UserViewModel, navController: NavController, themeViewModel: ThemeViewModel, isPermissionGranted: MutableState<Boolean>) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val currentUser by userViewModel.currentUser.collectAsState()
@@ -51,6 +50,13 @@ fun PreferencesScreen(userViewModel: UserViewModel, navController: NavController
             Switch(
                 checked = isDarkTheme,
                 onCheckedChange = { themeViewModel.toggleTheme() }
+            )
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Enable Notification  ")
+            Switch(
+                checked = isPermissionGranted.value,
+                onCheckedChange = { isPermissionGranted.value= !isPermissionGranted.value }
             )
         }
 

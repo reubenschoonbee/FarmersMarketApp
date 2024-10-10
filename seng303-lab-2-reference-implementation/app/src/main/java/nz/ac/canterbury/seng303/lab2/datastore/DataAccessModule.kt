@@ -12,6 +12,7 @@ import nz.ac.canterbury.seng303.lab2.models.Market
 import nz.ac.canterbury.seng303.lab2.models.Stall
 import nz.ac.canterbury.seng303.lab2.models.User
 import nz.ac.canterbury.seng303.lab2.viewmodels.MarketViewModel
+
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
 import org.koin.android.ext.koin.androidContext
@@ -71,4 +72,5 @@ val dataAccessModule = module {
             userStorage = get(named("userStorage"))
         )
     }
+
 }

@@ -38,40 +38,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import android.Manifest
 import android.content.Context
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
 import nz.ac.canterbury.seng303.lab2.models.Market
-import nz.ac.canterbury.seng303.lab2.scheduleWeeklyNotifications
+
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun Home(
     navController: NavController,
     markets: List<Market>,
-    context: Context,
-    notificationToggle: MutableState<Boolean>,
+    context: Context
 ) {
-
-    val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-    val isNotificationScheduled = remember { mutableStateOf(false) }
-    LaunchedEffect(key1 = notificationToggle.value) {
-        if (!postNotificationPermission.status.isGranted) {
-            postNotificationPermission.launchPermissionRequest()
-            }
-        else if (notificationToggle.value) {
-            scheduleWeeklyNotifications(context, markets, notificationToggle.value)
-            notificationToggle.value = false
-
-        }
-    }
-
 
     Column(
         modifier = Modifier
