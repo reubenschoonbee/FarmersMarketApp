@@ -11,9 +11,9 @@ import java.util.Calendar
 import java.util.Locale
 import android.content.Context
 
-fun scheduleWeeklyNotifications(context: Context, markets: List<Market>, value: Boolean) {
+fun scheduleWeeklyNotifications(context: Context, markets: List<Market>) {
     val workManager = WorkManager.getInstance(context)
-
+    workManager.cancelAllWork()
     markets.forEach { market ->
         // Serialize the market data
         val marketDataString = serializeMarkets(listOf(market))
@@ -37,14 +37,16 @@ fun scheduleWeeklyNotifications(context: Context, markets: List<Market>, value: 
             workManager.enqueue(oneTimeWorkRequest)
 
         } else {
+            // Notify exactly 24 hours before the market opens
+            val delayFor24HourNotification = delayInMillis - TimeUnit.HOURS.toMillis(24)
             // Case where market is opening in more than 24 hours, send the notification 24 hours before opening
-            val periodicWorkRequest = PeriodicWorkRequestBuilder<NotificationWorker>(7, TimeUnit.DAYS)
+            val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
                 .setInputData(data)
-                .setInitialDelay(delayInMillis - TimeUnit.HOURS.toMillis(24), TimeUnit.MILLISECONDS)
+                .setInitialDelay(delayFor24HourNotification, TimeUnit.MILLISECONDS)
                 .build()
 
             // Enqueue the PeriodicWorkRequest
-            workManager.enqueue(periodicWorkRequest)
+            workManager.enqueue(workRequest)
         }
     }
 }
@@ -71,11 +73,7 @@ fun calculateInitialDelay(market: Market): Long {
 
     // Get the current day of the week
     val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-    val daysUntilNextOpen = if (dayOfWeek >= currentDayOfWeek) {
-        dayOfWeek - currentDayOfWeek
-    } else {
-        7 - (currentDayOfWeek - dayOfWeek)
-    }
+
 
     // Set the opening time (e.g., 09:00)
     val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
@@ -87,7 +85,11 @@ fun calculateInitialDelay(market: Market): Long {
     val openMinute = Calendar.getInstance().apply {
         time = openTimeDate
     }.get(Calendar.MINUTE)
-
+    val daysUntilNextOpen = if (dayOfWeek >= currentDayOfWeek) {
+        dayOfWeek - currentDayOfWeek
+    } else {
+        7 - (currentDayOfWeek - dayOfWeek)
+    }
     // Set the calendar to the next market opening time
     calendar.add(Calendar.DAY_OF_YEAR, daysUntilNextOpen)
     calendar.set(Calendar.HOUR_OF_DAY, openHour)
@@ -98,11 +100,7 @@ fun calculateInitialDelay(market: Market): Long {
     val delayInMillis = calendar.timeInMillis - System.currentTimeMillis()
 
     // If the market opens in less than 24 hours, return the time until the opening
-    return if (delayInMillis < TimeUnit.HOURS.toMillis(24)) {
-        delayInMillis
-    } else {
-        delayInMillis - TimeUnit.HOURS.toMillis(24)
-    }
+    return delayInMillis
 }
 
 // Serialize market data to JSON

@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
             // LaunchedEffect to schedule notifications when permission is granted
             LaunchedEffect(isPermissionGranted.value) {
                 if (isPermissionGranted.value) {
-                    scheduleWeeklyNotifications(context, markets, true)
+                    scheduleWeeklyNotifications(context, markets)
                 }
             }
 

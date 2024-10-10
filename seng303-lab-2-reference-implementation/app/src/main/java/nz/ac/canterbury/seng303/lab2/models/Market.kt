@@ -22,7 +22,7 @@ class Market (
                     name = "South Christchurch Farmers Market",
                     description = "Premier destination for fresh, especially organic, produce",
                     openTimes = "Every Sunday, 9am to midday",
-                    openTimesForCalender = "Wednesday, 17:00",
+                    openTimesForCalender = "Sunday, 09:00",
                     location = "66 Colombo St",
                     address = "South Christchurch Library, South Christchurch Farmers' Market, Christchurch"
                 ),
