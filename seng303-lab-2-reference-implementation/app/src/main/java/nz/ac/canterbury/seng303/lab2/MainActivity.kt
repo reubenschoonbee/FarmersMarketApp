@@ -48,6 +48,13 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import nz.ac.canterbury.seng303.lab2.models.Market
 import android.Manifest
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
+import nz.ac.canterbury.seng303.lab2.screens.Share
 
 
 class MainActivity : ComponentActivity() {
@@ -60,7 +67,6 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         // Delete the datastore on launch
         if (false) {
             marketViewModel.deleteAll()
@@ -80,9 +86,17 @@ class MainActivity : ComponentActivity() {
             marketViewModel.getMarkets()
             val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
             val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-
             val isPermissionGranted = remember { mutableStateOf(false) }
+            val navController = rememberNavController()
 
+            LaunchedEffect(intent?.data) {
+                intent?.data?.let { uri ->
+                    val stallId = uri.lastPathSegment?.toIntOrNull()
+                    stallId?.let {
+                        navController.navigate("ProductsScreen/$stallId")
+                    }
+                }
+            }
             // LaunchedEffect to request permission
             LaunchedEffect(Unit) {
                 if (!postNotificationPermission.status.isGranted) {
@@ -106,13 +120,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-
-
-
-
             Lab1Theme(isDarkTheme) {
-                val navController = rememberNavController()
+
                 val isLoggedIn by userViewModel.isLoggedIn.collectAsState()
+                // A surface container using the 'background' color from the theme
 
                 Scaffold(
                     topBar = {
