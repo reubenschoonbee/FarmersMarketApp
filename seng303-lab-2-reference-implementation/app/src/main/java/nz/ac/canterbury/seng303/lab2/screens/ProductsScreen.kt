@@ -37,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 import nz.ac.canterbury.seng303.lab2.models.Product
@@ -88,7 +87,7 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
 
                         Image(
                             painter = painterResource(id = R.drawable.review),
-                            contentDescription = R.string.contentDescription.toString(),
+                            contentDescription = "Review",
                             modifier = Modifier
                                 .size(25.dp)
                                 .clickable { showReviewDialog = true },
@@ -100,7 +99,7 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = stall.stallTextHeader,
+                        text = "Check Out Our New Additions!",
                         style = MaterialTheme.typography.headlineSmall,
                     )
 
@@ -157,7 +156,7 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
 
                     Image(
                         painter = painterResource(id = R.drawable.review),
-                        contentDescription = R.string.contentDescription.toString(),
+                        contentDescription = "Review",
                         modifier = Modifier
                             .size(25.dp)
                             .clickable { showReviewDialog = true },
@@ -171,7 +170,7 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
 
                 // Section for highlighted products
                 Text(
-                    text = stall.stallTextHeader,
+                    text = "Check Out Our New Additions!",
                     style = MaterialTheme.typography.headlineSmall,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -223,12 +222,7 @@ fun ProductsScreen(navController: NavHostController, stallId: Int, stallViewMode
 }
 
 @Composable
-fun ReviewDialog(
-    stall: Stall,
-    onDismiss: () -> Unit,
-    stallViewModel: StallViewModel,
-    userViewModel: UserViewModel
-) {
+fun ReviewDialog(stall: Stall, onDismiss: () -> Unit, stallViewModel: StallViewModel, userViewModel: UserViewModel) {
     var comment by rememberSaveable { mutableStateOf("") }
     var rating by rememberSaveable { mutableIntStateOf(5) }
     val currentUser by userViewModel.currentUser.collectAsState()
@@ -237,7 +231,7 @@ fun ReviewDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(text = stringResource(id = R.string.reviews_for) + " ${stall.name}")
+            Text(text = "Reviews for ${stall.name}")
         },
         text = {
             Column {
@@ -249,21 +243,20 @@ fun ReviewDialog(
                         }
                     }
                 } else {
-                    Text(text = stringResource(id = R.string.no_review))
+                    Text(text = "No reviews yet.")
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-
                 if (isLoggedIn) {
-                    Text(text = stringResource(id = R.string.add_review))
+                    Text(text = "Add a Review")
                     OutlinedTextField(
                         value = comment,
                         onValueChange = { comment = it },
-                        label = { Text(stringResource(id = R.string.your_review)) },
+                        label = { Text("Your Review") },
                         maxLines = 4
                     )
                     // Rating Slider
-                    Text(text = stringResource(id = R.string.rating) + ": $rating")
+                    Text(text = "Rating: $rating")
                     Slider(
                         value = rating.toFloat(),
                         onValueChange = { rating = it.toInt() },
@@ -289,12 +282,12 @@ fun ReviewDialog(
                 },
                 enabled = comment.isNotBlank()
             ) {
-                Text(text = stringResource(id = R.string.submit))
+                Text("Submit")
             }
         },
         dismissButton = {
             Button(onClick = onDismiss) {
-                Text(text = stringResource(id = R.string.cancel))
+                Text("Cancel")
             }
         }
     )
@@ -304,12 +297,13 @@ fun ReviewDialog(
 fun ReviewItem(review: Review) {
     Column(modifier = Modifier.padding(8.dp)) {
         Text(
+            //text = "${review.username} (${SimpleDateFormat("dd/MM/yyyy").format(Date(review.timestamp))})",
             text = review.username,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = stringResource(id = R.string.rating) + ": ${review.rating}/5",
+            text = "Rating: ${review.rating}/5",
             style = MaterialTheme.typography.bodySmall
         )
         Text(
@@ -372,11 +366,11 @@ fun ProductGridItem(navController: NavHostController,product: Product) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(text = "$ " + product.price.toString(), style = MaterialTheme.typography.bodyMedium)
+            Text(text = "$" + product.price.toString(), style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.width(10.dp))
             Image(
                 painter = painterResource(id = if (product.quantity > 0) R.drawable.in_stock else R.drawable.out_of_stock),
-                contentDescription = (if (product.quantity > 0) R.string.in_stock else R.string.out_of_stock).toString(),
+                contentDescription = if (product.quantity > 0) "In stock" else "Out of stock",
                 modifier = Modifier
                     .size(20.dp)
                     .padding(start = 4.dp)

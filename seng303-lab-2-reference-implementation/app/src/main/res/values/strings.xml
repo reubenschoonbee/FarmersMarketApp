@@ -99,27 +99,6 @@
     <string name="pie_paradise_category">Pies</string>
     <string name="jammin_good_category">Jams</string>
 
-    <!-- Product Labels -->
-    <string name="in_stock">In stock</string>
-    <string name="out_of_stock">Out of stock</string>
-    <string name="no_prodcut">Could not find product</string>
-    <string name="order_success">Pre Order Request Successful</string>
-    <string name="must_log_in">User must be logged in to pre order</string>
-    <string name="pre_order">Pre-order</string>
-    <string name="items">items</string>
-    <string name="dollas">$</string>
-
-    <!-- Review Labels -->
-    <string name="rating">Rating:</string>
-    <string name="submit">Submit</string>
-    <string name="cancel">Cancel:</string>
-
-    <string name="no_review">No reviews yet.</string>
-    <string name="add_review">Add a Review"</string>
-    <string name="your_review">Your Review"</string>
-    <string name="reviews_for">Reviews for </string>
-    <string name="contentDescription">Review</string>
-
     <!-- Splash Screen Introduction -->
     <string name="splash_intro">Welcome to the Farmers Market App! Discover fresh products and local delicacies.</string>
 </resources>
