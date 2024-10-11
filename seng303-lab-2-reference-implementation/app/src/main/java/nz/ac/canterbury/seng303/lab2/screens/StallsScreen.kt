@@ -64,7 +64,7 @@ fun StallsScreen(navController: NavController, stallViewModel: StallViewModel, m
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F0F0)) // Light gray background
+//            .background(Color(0xFFF0F0F0)) // Light gray background
     ) {
         // Filtering Component
         item {
