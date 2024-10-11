@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalConfiguration
 import android.content.res.Configuration
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.clip
@@ -65,10 +66,10 @@ fun ProductDetailScreen(
                     contentScale = ContentScale.Crop
                 )
 
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(12.dp))
 
                 // Product details in a Column
-                Column(
+                LazyColumn(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
@@ -76,14 +77,15 @@ fun ProductDetailScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ProductDetails(
-                        product = product,
-                        selectedQuantity = selectedQuantity,
-                        onQuantityChange = { selectedQuantity = it },
-                        onPreOrder = {
-                            handlePreOrder(userViewModel, context)
-                        }
-                    )
+                    item {
+                        ProductDetails(
+                            product = product,
+                            selectedQuantity = selectedQuantity,
+                            onQuantityChange = { selectedQuantity = it },
+                            onPreOrder = {
+                                handlePreOrder(userViewModel, context)
+                            }
+                        ) }
                 }
             }
         } else {

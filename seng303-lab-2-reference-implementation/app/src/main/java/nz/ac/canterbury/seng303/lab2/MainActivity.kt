@@ -53,7 +53,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalConfiguration
 import nz.ac.canterbury.seng303.lab2.screens.Share
 
 
@@ -82,13 +84,13 @@ class MainActivity : ComponentActivity() {
             val themeViewModel: ThemeViewModel = viewModel()
             val isDarkTheme by themeViewModel.isDarkTheme.collectAsState()
             val context = LocalContext.current
-            val isFirstLaunch = remember { mutableStateOf(true) }
+            val isFirstLaunch = rememberSaveable { mutableStateOf(true) }
             marketViewModel.getMarkets()
             val markets: List<Market> by marketViewModel.markets.collectAsState(emptyList())
             val postNotificationPermission = rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
-            val isPermissionGranted = remember { mutableStateOf(false) }
+            val isPermissionGranted = rememberSaveable { mutableStateOf(false) }
             val navController = rememberNavController()
-
+            val isNotificationScheduled = rememberSaveable { mutableStateOf(false) }
             LaunchedEffect(intent?.data) {
                 intent?.data?.let { uri ->
                     val stallId = uri.lastPathSegment?.toIntOrNull()
@@ -97,28 +99,39 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-            // LaunchedEffect to request permission
-            LaunchedEffect(Unit) {
-                if (!postNotificationPermission.status.isGranted) {
-                    postNotificationPermission.launchPermissionRequest()
+
+                // LaunchedEffect to request permission
+                LaunchedEffect(Unit) {
+                    if (!postNotificationPermission.status.isGranted) {
+                        postNotificationPermission.launchPermissionRequest()
+                    }
                 }
+
+                // LaunchedEffect to check permission status
+            if (isFirstLaunch.value) {
+                LaunchedEffect(postNotificationPermission.status) {
+                    if (postNotificationPermission.status.isGranted) {
+                        isPermissionGranted.value = true
+                    } else {
+                        isPermissionGranted.value = false
+                    }
+                }
+                isFirstLaunch.value = false
             }
 
-            // LaunchedEffect to check permission status
-            LaunchedEffect(postNotificationPermission.status) {
-                if (postNotificationPermission.status.isGranted) {
-                    isPermissionGranted.value = true
-                } else {
-                    isPermissionGranted.value = false
+                if (!isNotificationScheduled.value) {
+                    // LaunchedEffect to schedule notifications when permission is granted
+                    LaunchedEffect(isPermissionGranted.value) {
+                        if (isPermissionGranted.value) {
+                            scheduleWeeklyNotifications(context, markets)
+                            isNotificationScheduled.value = true
+                        }
+                    }
                 }
-            }
 
-            // LaunchedEffect to schedule notifications when permission is granted
-            LaunchedEffect(isPermissionGranted.value) {
-                if (isPermissionGranted.value) {
-                    scheduleWeeklyNotifications(context, markets)
-                }
-            }
+
+
+
 
             Lab1Theme(isDarkTheme) {
 

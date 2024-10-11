@@ -1,5 +1,6 @@
 package nz.ac.canterbury.seng303.lab2.screens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.AlertDialog
@@ -8,6 +9,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -52,11 +54,25 @@ fun PreferencesScreen(userViewModel: UserViewModel, navController: NavController
                 onCheckedChange = { themeViewModel.toggleTheme() }
             )
         }
+
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(text = "Enable Notification  ")
             Switch(
                 checked = isPermissionGranted.value,
-                onCheckedChange = { isPermissionGranted.value= !isPermissionGranted.value }
+                onCheckedChange = { isChecked ->
+                    // Update the state based on the user interaction with the Switch
+                    if(isChecked) {
+                        Log.d("PreferencesScreen", "if is checked before isPermissionGranted: ${isPermissionGranted.value}")
+                        isPermissionGranted.value = true
+                        Log.d("PreferencesScreen", "if is checked after isPermissionGranted: ${isPermissionGranted.value}")
+                    } else {
+                        Log.d("PreferencesScreen", "if not checked before isPermissionGranted: ${isPermissionGranted.value}")
+                        isPermissionGranted.value = false
+                        Log.d("PreferencesScreen", "if not checked after isPermissionGranted: ${isPermissionGranted.value}")
+                    }
+
+                }
             )
         }
 
