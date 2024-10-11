@@ -8,7 +8,8 @@ class Stall(
     val category: String,
     val products: List<Product>,
     val marketIds: List<Int>,
-    val imageResId: Int,
+    val imageResId: Int = R.drawable.no_image_available,
+    val reviews: MutableList<Review> = mutableListOf()
 ) : Identifiable {
     override fun getIdentifier(): Int {
         return id

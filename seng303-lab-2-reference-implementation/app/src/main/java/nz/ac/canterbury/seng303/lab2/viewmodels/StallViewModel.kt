@@ -8,10 +8,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nz.ac.canterbury.seng303.lab2.datastore.Storage
+import nz.ac.canterbury.seng303.lab2.models.Review
 import nz.ac.canterbury.seng303.lab2.models.Stall
 
 class StallViewModel(private val stallStorage: Storage<Stall>) : ViewModel() {
@@ -44,11 +46,23 @@ class StallViewModel(private val stallStorage: Storage<Stall>) : ViewModel() {
             }
     }
 
+    // Get stall by stallId
     fun getStallById(stallId: Int?) = viewModelScope.launch {
         if (stallId != null) {
             _selectedStall.value = stallStorage.get { it.getIdentifier() == stallId }.first()
         } else {
             _selectedStall.value = null
+        }
+    }
+
+    // Function to add a review to a stall
+    fun addReviewToStall(stallId: Int, review: Review) = viewModelScope.launch {
+        val stall = stallStorage.get { it.getIdentifier() == stallId }.firstOrNull()
+        if (stall != null) {
+            stall.reviews.add(review)
+            stallStorage.edit(stallId, stall).collect {}
+            stallStorage.getAll().catch { Log.e("STALL_VIEW_MODEL", it.toString()) }
+                .collect { _stalls.emit(it) }
         }
     }
 
@@ -71,19 +85,6 @@ class StallViewModel(private val stallStorage: Storage<Stall>) : ViewModel() {
             }
         }
     }
-
-
-//
-//    private val _stallByName = MutableStateFlow<Identifiable?>(null)
-//    val stallByName: StateFlow<Identifiable?> = _stallByName
-
-    // Function to fetch stall by name and marketId
-//    fun getStallByName(marketId: Int, stallName: String) = viewModelScope.launch {
-//        // Collect the result from the storage, based on marketId
-//        stallStorage.getStallByName(marketId, stallName).collect { fetchedStall ->
-//            _stallByName.value = fetchedStall // Now the fetched stall can be Market1Stalls or Market2Stalls
-//        }
-//    }
 
 }
 
