@@ -24,6 +24,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import nz.ac.canterbury.seng303.lab2.R
 import nz.ac.canterbury.seng303.lab2.models.Product
 import nz.ac.canterbury.seng303.lab2.viewmodels.StallViewModel
 import nz.ac.canterbury.seng303.lab2.viewmodels.UserViewModel
@@ -47,7 +49,7 @@ fun ProductDetailScreen(
 
     if (product != null) {
         if (isLandscape) {
-            // Landscape layout: image on the left, details on the right
+            // Landscape layout
             Row(
                 modifier = Modifier
                     .fillMaxSize()
@@ -89,7 +91,7 @@ fun ProductDetailScreen(
                 }
             }
         } else {
-            // Portrait layout: stacked vertically
+            // Portrait layout
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -122,17 +124,17 @@ fun ProductDetailScreen(
             }
         }
     } else {
-        Text(text = "Could not find product", style = MaterialTheme.typography.headlineMedium)
+        Text(text = R.string.no_prodcut.toString(), style = MaterialTheme.typography.headlineMedium)
     }
 
 }
 
 fun handlePreOrder(userViewModel: UserViewModel, context: android.content.Context) {
     if (userViewModel.isLoggedIn.value) {
-        Toast.makeText(context, "Pre Order Request Successful", Toast.LENGTH_SHORT).show()
-        // TODO: Handle pre-order
+        Toast.makeText(context, R.string.order_success, Toast.LENGTH_SHORT).show()
+        //  Handle pre-order
     } else {
-        Toast.makeText(context, "User must be logged in to pre order", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, R.string.must_log_in, Toast.LENGTH_SHORT).show()
     }
 }
 
@@ -157,7 +159,7 @@ fun ProductDetails(
 
         // Product price
         Text(
-            text = "$${product.price}",
+            text = "$ ${product.price}",
             style = MaterialTheme.typography.headlineMedium,
         )
 
@@ -222,7 +224,7 @@ fun ProductDetails(
                 .padding(horizontal = 56.dp),
             contentPadding = PaddingValues(6.dp)
         ) {
-            Text(text = "Pre-order $selectedQuantity items")
+            Text(text = stringResource(id = R.string.pre_order) + " $selectedQuantity " + stringResource(id = R.string.items))
         }
     }
 }
